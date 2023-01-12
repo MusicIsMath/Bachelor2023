@@ -13,6 +13,7 @@ The goal of this project is to install circuit boards on various tools used in a
   2. One circuit board on the moving part of the CNC itself (communicating with "1" & "3")
   3. Raspberry pi, used for sending the CNC end-effektor's xyz coordinates (communicating with "2" & "4")
   4. CNC controll circuit board, used for actually moving the steppet motors (communicating with "3")
+  
   Example drawing:
   ![CNC](https://user-images.githubusercontent.com/112080849/212081366-435b20fc-efd4-4602-bfc5-22723c3170e6.PNG)
 - Design of a singel or potentially multiple circuit boards for various tools used in the CNC machine
