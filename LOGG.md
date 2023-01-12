@@ -26,6 +26,8 @@ While other communication methods such as I2C, SPI and Serial communication can 
 In summary, while other communication methods such as I2C, SPI, Serial, Bluetooth and WiFi can also be used to communicate between two Arduinos, UART has certain advantages over these methods when communicating between two Arduinos in close proximity. UART uses separate TX and RX pins for each direction of communication, it's simple to implement, requires minimal additional hardware, supports standard baudrate settings, making it a suitable choice for small data transfer and minimal communication requirements.
 
 We then tested this in Thinkercad:
+
+
 //Arm? som utfører noe
 char Mymessage[2];
 
