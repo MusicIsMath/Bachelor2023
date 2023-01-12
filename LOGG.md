@@ -27,7 +27,7 @@ In summary, while other communication methods such as I2C, SPI, Serial, Bluetoot
 
 We then tested this in Thinkercad:
 
-'''
+```
 //Arm? som utfører noe
 char Mymessage[2];
 
@@ -90,6 +90,6 @@ char Mymessage[] = "Abc";
 
     delay(1000);
   }
-  '''
+  ```
   ![image](https://user-images.githubusercontent.com/112080849/212087310-0f8803e8-992e-4cda-ac3c-7811079107e7.png)
 
