@@ -1,3 +1,4 @@
 # Bachelor2023
 
-## Prosjekt spesifikasjone:
+## Prosjekt spesifikasjon:
+test
