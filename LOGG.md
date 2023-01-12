@@ -1,6 +1,7 @@
 # Bachelor2023
 
 ## Uke 1:
+### 12.01.23
 We started looking at how we can get two Arduino's to communicate:
 There are several different types of communicaton methods we could use, here are the main ones:
 1. Serial Communication: One Arduino can send data to the other via the serial port (TX and RX pins) using the Serial.write() and Serial.read() functions.
