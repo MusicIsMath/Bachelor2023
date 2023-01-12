@@ -24,3 +24,69 @@ While other communication methods such as I2C, SPI and Serial communication can 
 - UART, on the other hand, uses separate TX and RX pins for each direction of communication, which allows for more flexibility and can be useful in situations where you need to communicate with multiple devices simultaneously. It's simple to implement, requires minimal additional hardware and supports standard baudrate settings, making it a suitable choice for small data transfer and minimal communication requirements.
 
 In summary, while other communication methods such as I2C, SPI, Serial, Bluetooth and WiFi can also be used to communicate between two Arduinos, UART has certain advantages over these methods when communicating between two Arduinos in close proximity. UART uses separate TX and RX pins for each direction of communication, it's simple to implement, requires minimal additional hardware, supports standard baudrate settings, making it a suitable choice for small data transfer and minimal communication requirements.
+
+We then tested this in Thinkercad:
+//Arm? som utfører noe
+char Mymessage[2];
+
+int LED = 0;
+
+const int buttonPin = 2;
+int buttonState = 0;
+  
+  void setup()
+  {
+    Serial.begin(9600);
+    
+    pinMode (LED, OUTPUT);
+    pinMode( buttonPin, INPUT );
+  }
+  
+  void loop()
+  {
+    Serial.readBytes(Mymessage,3);  
+    
+    if ( Mymessage[0] == 'A')
+    {
+      LED = 9;
+    }  
+    if ( Mymessage[0] == 'B')
+    {
+      LED = 10;
+    }
+    if ( Mymessage[0] == 'C')
+    {
+      LED = 11;
+    }
+    
+    buttonState = digitalRead( buttonPin );
+    
+    if ( buttonState == HIGH )
+    {
+      digitalWrite(LED,HIGH);
+      delay(200);
+    }
+    else
+    {
+      digitalWrite(LED,LOW);
+    } 
+    delay(1000);
+  }
+
+//Verktøy som sender informasjon om seg selv
+
+char Mymessage[] = "Abc";
+
+  void setup() 
+  {
+    Serial.begin(9600);
+  }
+
+  void loop() 
+  {
+    Serial.write(Mymessage);
+
+    delay(1000);
+  }
+  ![image](https://user-images.githubusercontent.com/112080849/212087310-0f8803e8-992e-4cda-ac3c-7811079107e7.png)
+
