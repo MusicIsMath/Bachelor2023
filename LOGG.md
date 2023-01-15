@@ -100,5 +100,7 @@ char Mymessage[] = "Abc";
 #### Learning the basics of javascript / VC code
 Started looking at a basic example from youtube (https://www.youtube.com/watch?v=VShtPwEkDD0&t=248s):
 ![image](https://user-images.githubusercontent.com/112080849/212546363-8160a28f-93fa-4926-b000-cc21ce96c05f.png)
-
+Things to note:
+- We have to pick "bash" in the terminal window in VS code, if not the command "node Oving1.js" wont work
+- The project / file has to be saved in a handpicked folder, before you even start
   
