@@ -119,3 +119,12 @@ const server = http.createServer(function(req,res){
 At last we check the localhost:
 
 ![image](https://user-images.githubusercontent.com/112080849/212546740-77240cae-ee71-4777-be7b-e52393911730.png)
+
+
+We can now make a HTML file that we want to render:
+- click "new file" under current project folder
+- call it whatever.html
+- type "!" and hit enter, this auto generates the outline of html file:
+![image](https://user-images.githubusercontent.com/112080849/212546992-2e7c02ec-63a0-4a5b-8949-4e375ba1a53d.png)
+
+
