@@ -109,3 +109,13 @@ Things to note:
 - We have to pick "bash" in the terminal window in VS code, if not the command "node Oving1.js" wont work
 - The project / file has to be saved in a handpicked folder, before you even start
   
+We can now make a function for the "response" (line 4) which in short just means what will we output on the website:
+```
+const server = http.createServer(function(req,res){
+    res.write('hello node')
+    res.end()
+})
+```
+At last we check the localhost:
+
+![image](https://user-images.githubusercontent.com/112080849/212546740-77240cae-ee71-4777-be7b-e52393911730.png)
