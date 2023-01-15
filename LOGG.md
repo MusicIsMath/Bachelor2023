@@ -2,6 +2,7 @@
 
 ## Uke 1:
 ### 12.01.23
+#### Arduino communication
 We started looking at how we can get two Arduino's to communicate:
 There are several different types of communicaton methods we could use, here are the main ones:
 1. Serial Communication: One Arduino can send data to the other via the serial port (TX and RX pins) using the Serial.write() and Serial.read() functions.
@@ -95,5 +96,7 @@ char Mymessage[] = "Abc";
   ![image](https://user-images.githubusercontent.com/112080849/212087310-0f8803e8-992e-4cda-ac3c-7811079107e7.png)
 
 
+### 12.01.23
+#### Learning the basics of javascript / VC code
 
-  ### 12.01.23
+  
