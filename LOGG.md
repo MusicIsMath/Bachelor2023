@@ -152,3 +152,6 @@ const server = http.createServer(function(req,res){
 
 We now, kill and restart the server using the terminal then refresh the localhost in our browser, we see this:
 ![image](https://user-images.githubusercontent.com/112080849/212547528-51b1f427-e6a6-432c-befe-69b9a85a4b4f.png)
+
+#### Raspberry Pi and node.js communication:
+
