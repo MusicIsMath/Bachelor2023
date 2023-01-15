@@ -125,6 +125,29 @@ We can now make a HTML file that we want to render:
 - click "new file" under current project folder
 - call it whatever.html
 - type "!" and hit enter, this auto generates the outline of html file:
-![image](https://user-images.githubusercontent.com/112080849/212546992-2e7c02ec-63a0-4a5b-8949-4e375ba1a53d.png)
+![image](https://user-images.githubusercontent.com/112080849/212547366-9a71fe34-3038-45a7-9b2b-3175fab083f7.png)
+
+I typed inn "This is HTML" in the body, this is whats gonna show on out local host when we are done.
+
+Now we got back to the javascript program, bc we have to do some rewriting of the code, to make it communicate with the html file:
+
+Rewriting of line 4 function:
+```
+const server = http.createServer(function(req,res){
+    res.writeHead(200, {'Content-Type': 'text/html'})
+    fs.readFile('index.html',function(error,data){
+        if (error)
+        {
+            res.writeHead(404)
+            res.write('Error: file not found')
+        }
+        else
+        {
+            res.write(data)
+        }
+        res.end
+    })
+})
+```
 
 
