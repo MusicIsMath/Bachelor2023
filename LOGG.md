@@ -98,5 +98,7 @@ char Mymessage[] = "Abc";
 
 ### 12.01.23
 #### Learning the basics of javascript / VC code
+Started looking at a basic example from youtube (https://www.youtube.com/watch?v=VShtPwEkDD0&t=248s):
+![image](https://user-images.githubusercontent.com/112080849/212546363-8160a28f-93fa-4926-b000-cc21ce96c05f.png)
 
   
