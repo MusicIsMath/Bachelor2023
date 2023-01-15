@@ -2,7 +2,7 @@
 
 ## Uke 1:
 ### 12.01.23
-#### Arduino communication
+### Arduino communication
 We started looking at how we can get two Arduino's to communicate:
 There are several different types of communicaton methods we could use, here are the main ones:
 1. Serial Communication: One Arduino can send data to the other via the serial port (TX and RX pins) using the Serial.write() and Serial.read() functions.
@@ -101,7 +101,7 @@ char Mymessage[] = "Abc";
 
 
 ### 12.01.23
-#### Learning the basics of javascript / VC code
+### Learning the basics of javascript / VC code
 Started looking at a basic example from youtube (https://www.youtube.com/watch?v=VShtPwEkDD0&t=248s):
 ![image](https://user-images.githubusercontent.com/112080849/212546363-8160a28f-93fa-4926-b000-cc21ce96c05f.png)
 
@@ -153,5 +153,5 @@ const server = http.createServer(function(req,res){
 We now, kill and restart the server using the terminal then refresh the localhost in our browser, we see this:
 ![image](https://user-images.githubusercontent.com/112080849/212547528-51b1f427-e6a6-432c-befe-69b9a85a4b4f.png)
 
-#### Raspberry Pi and node.js communication:
+### Raspberry Pi and node.js communication:
 
