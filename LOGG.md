@@ -100,7 +100,7 @@ char Mymessage[] = "Abc";
 --------------------------------------------------------------------------------------------------------------------------
 
 
-### 12.01.23
+### 15.01.23
 ### Learning the basics of javascript / VC code
 Started looking at a basic example from youtube (https://www.youtube.com/watch?v=VShtPwEkDD0&t=248s):
 ![image](https://user-images.githubusercontent.com/112080849/212546363-8160a28f-93fa-4926-b000-cc21ce96c05f.png)
@@ -157,7 +157,9 @@ We now, kill and restart the server using the terminal then refresh the localhos
 
 https://github.com/meech-ward/NodeJs-Raspberry-Pi
 
+--------------------------------------------------------------------------------------------------------------
 
+### 16.01.23
 ### Raspberry Pi and Arduino communication:
 
 ```
