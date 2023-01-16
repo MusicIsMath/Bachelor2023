@@ -208,3 +208,5 @@ public class App
 ### Arduino and javascript / node.js communication:
 Not yet sure if this will be needed / used in our project, at this point.
 ![image](https://user-images.githubusercontent.com/112080849/212664220-d1044d9b-b82d-45ed-91c7-15a47c7c2ecc.png)
+
+for this example / learning process, i will be attempting to connect a basic potentiometer circuit on my arduino and then connecting this to my server and read its status via a web-browser
