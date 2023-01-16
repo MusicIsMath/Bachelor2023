@@ -205,3 +205,4 @@ public class App
     }
 }
 ```
+### Arduino and javascript / node.js communication:
