@@ -236,6 +236,11 @@ We can now make a quick .js program to read from the serialport on the arduino:
 ![image](https://user-images.githubusercontent.com/112080849/212694966-d03736f7-ce5e-4170-8e3b-c556c1dec600.png)
 
 Currently struggeling with an error, if there was no bugs, we should now see the potentiometer value in the terminal window in Visual studio Code
+
+The problem was, that i had not defined the Readline, i swapped out the code and it now works:
+
+![image](https://user-images.githubusercontent.com/112080849/212701516-27d22648-2b65-43c0-951a-70b3e2938a4e.png)
+
 ### Slave Arduino prototype:
 ```
 char SMymessage[4];
