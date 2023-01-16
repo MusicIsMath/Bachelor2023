@@ -159,6 +159,7 @@ https://github.com/meech-ward/NodeJs-Raspberry-Pi
 
 --------------------------------------------------------------------------------------------------------------
 
+## Uke 2
 ### 16.01.23
 ### Raspberry Pi and Arduino communication:
 
