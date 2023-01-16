@@ -215,6 +215,9 @@ Circuit:
 
 ![image](https://user-images.githubusercontent.com/112080849/212668088-b10133a8-c5ca-42a9-ade0-4b377668bd98.png)
 
+Code:
+
+![image](https://user-images.githubusercontent.com/112080849/212671124-703191f5-904e-4864-96a2-c22646142fe6.png)
 
 
 
