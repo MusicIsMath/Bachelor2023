@@ -212,7 +212,10 @@ Not yet sure if this will be needed / used in our project, at this point.
 for this example / learning process, i will be attempting to connect a basic potentiometer circuit on my arduino and then connecting this to my server and read its status via a web-browser
 
 Circuit:
-![image](https://user-images.githubusercontent.com/112080849/212668004-d1dba5d1-0d73-4c00-ac95-22192e6ce065.png)
+
+![image](https://user-images.githubusercontent.com/112080849/212668088-b10133a8-c5ca-42a9-ade0-4b377668bd98.png)
+
+
 
 
 ### Slave Arduino prototype:
