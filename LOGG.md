@@ -210,3 +210,101 @@ Not yet sure if this will be needed / used in our project, at this point.
 ![image](https://user-images.githubusercontent.com/112080849/212664220-d1044d9b-b82d-45ed-91c7-15a47c7c2ecc.png)
 
 for this example / learning process, i will be attempting to connect a basic potentiometer circuit on my arduino and then connecting this to my server and read its status via a web-browser
+
+### Slave Arduino prototype:
+```
+char SMymessage[4];
+char RMymessage[2];
+
+String Sdata;
+
+  void setup() 
+  {
+    Serial.begin(9600);
+  }
+
+  void loop() 
+  {
+    RecieveChar();
+    SendData();
+    
+    //If there is a message from rPI read it
+    if(Serial.available()) RecieveData();
+    //If message to send is not empty send message
+    if(strlen(SMymessage) != 0)
+    {
+      SendChar(SMymessage);
+    }
+    delay(500);
+  }
+
+  //Recieve data between Arduinos
+  void RecieveChar()
+  {
+    //the number stands for how many char it will read
+    Serial.readBytes(RMymessage,3);
+  }
+  //Send data between Arduinos
+  void SendChar(char text[])
+  {
+    Serial.write(text);
+  }
+
+  //Recieve data between Arduino and RasPI
+  void RecieveData()
+  {
+    //Turns recieved string to the char array "SMymessage"
+      Serial.readString().toCharArray(SMymessage,5);
+  }
+  //Send data between Arduino and RasPI
+  void SendData()
+  {
+    Serial.println(Sdata);
+  }
+```
+
+### Master Arduino(Tool) prototype:
+```
+//setting first char in char array to '0' clears whole array
+char SMymessage[1];
+char RMymessage[9];
+
+float x, y, z;
+  
+  void setup()
+  {
+    Serial.begin(9600);
+    pinMode(9, OUTPUT);
+  }
+  
+  void loop()
+  {
+    SendChar();
+    RecieveChar();
+    
+    UpdatePos();
+    
+    delay(500);
+  }
+
+//Recieve and Send data between Arduinos
+  void RecieveChar()
+  {
+    //the number stands for how many char it will read
+    Serial.readBytes(RMymessage,10);
+    
+  }
+ 
+  void SendChar()
+  {
+    Serial.write(SMymessage);
+  }
+
+//Recieve position
+  void UpdatePos()
+  {
+    x = RMymessage[1];
+    y = RMymessage[2];
+    z = RMymessage[3];
+  }
+```
