@@ -156,3 +156,49 @@ We now, kill and restart the server using the terminal then refresh the localhos
 ### Raspberry Pi and node.js communication:
 
 https://github.com/meech-ward/NodeJs-Raspberry-Pi
+
+
+### Raspberry Pi and Arduino communication:
+
+```
+import com.fazecast.jSerialComm.SerialPort;
+
+public class App 
+{
+    public static void main(String[] args) throws Exception 
+    {
+        //Serial Communication Setup
+        SerialPort sp = SerialPort.getCommPort("COM4");
+          sp.setComPortParameters(9600, 8, 1, 0);
+          sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
+
+          //Open port
+          sp.openPort();
+
+          //Connetion status
+          if(sp.openPort()) System.out.println("Opened");
+          else System.out.println("Open failed");
+
+          if(sp.closePort()) System.out.println("Closed");
+          else System.out.println("Closed failed");
+
+          //Send Integer to Arduino
+          Integer x = 1;
+
+          sp.getOutputStream().write(x.byteValue());
+          sp.getOutputStream().flush();
+
+          //Recieve from COM port
+          byte[] y = new byte[100];
+          //Amount of bytes
+          int numRead = sp.readBytes(y, y.length);
+          //Find out why string needs to be written like this
+          String S = new String(y, "UTF-8");
+
+          System.out.println(numRead + " bytes: " + S);
+
+          //Close port
+          sp.closePort();
+    }
+}
+```
