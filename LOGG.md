@@ -223,9 +223,12 @@ Installing packages for Serialport and socket.io:
 
 - make a new folder
 - enter the folder via the terminal window
+
 ![image](https://user-images.githubusercontent.com/112080849/212685445-944b6b06-4221-4324-a221-ef4373a7fad0.png)
+
 - type "npm init"
 - install the packages:
+
 ![image](https://user-images.githubusercontent.com/112080849/212685629-3b21c01a-461a-4d83-95f5-ebcf1b63eb4e.png)
 
 
