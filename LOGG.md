@@ -231,7 +231,11 @@ Installing packages for Serialport and socket.io:
 
 ![image](https://user-images.githubusercontent.com/112080849/212685629-3b21c01a-461a-4d83-95f5-ebcf1b63eb4e.png)
 
+We can now make a quick .js program to read from the serialport on the arduino:
 
+![image](https://user-images.githubusercontent.com/112080849/212694966-d03736f7-ce5e-4170-8e3b-c556c1dec600.png)
+
+Currently struggeling with an error, if there was no bugs, we should now see the potentiometer value in the terminal window in Visual studio Code
 ### Slave Arduino prototype:
 ```
 char SMymessage[4];
