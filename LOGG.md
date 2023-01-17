@@ -326,3 +326,55 @@ char RMymessage[9];
     Serial.write(Tool);
   }
 ```
+
+### 17.01.23
+### Read and write arduino / javascript / node.js:
+#### JS code:
+```
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+const parser = new ReadlineParser();
+
+port.pipe(parser);
+
+parser.on('data', (data) => {
+    console.log(data);
+    port.write('A')
+});
+
+port.on('open', () => {
+    console.log('Serial port is open')
+    port.write('A')
+});
+```
+
+### Arduino / c++ code:
+```
+int percent = 0;
+int prevPercent = 0;
+char InnValue=0;
+char p[100];
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(12,OUTPUT);
+  digitalWrite(12,LOW);
+}
+
+void loop() {
+  Serial.readBytes(p,1);
+  percent = round(analogRead(2) / 1024.00*100);
+  if (percent != prevPercent)
+  {
+    Serial.println(percent);
+    prevPercent = percent;
+  }
+  if (p[0]=='A')
+  {
+    digitalWrite(12,HIGH);
+  }
+  delay(100);
+
+}
+```
