@@ -432,3 +432,74 @@ char RChar[5];
       
     }
   }
+
+
+#### Updated slave arduino(with lock function):
+```
+//Has to always be 1 bigger than message recieving
+char RChar[5];
+//DigitalPIN for lock function
+int lock = 2;
+
+  void setup() 
+  {
+    Serial.begin( 9600 );
+    //Sets pinMode for lock function
+    pinMode( lock, OUTPUT );
+  }
+
+  void loop() 
+  {
+    if( Serial.available() ){
+      RecieveChar();
+      
+      Read();
+    }
+    
+    delay(300);
+  }
+
+  //Recieve data between Arduinos and to rasPI
+  void RecieveChar()
+  {
+    //The number stands for how many char it will read
+    //Will wait till there is that many char to read
+    Serial.readBytes( RChar, 4 );
+  }
+
+  //Send data between Arduinos
+  void SendChar( char text[] )
+  {
+    Serial.write( text );
+  }
+  
+  //Send data between Arduino and RasPI
+  void SendData( char text[] )
+  {
+    Serial.println( text );
+  }
+
+  //Reads recived string and checks what it includes
+  void Read()
+  {
+    if ( RChar[0] == 'M' ){
+      SendChar( RChar );
+    }
+    else if ( RChar[0] == 'E' || RChar[0] == 'F' ){ 
+      SendData( RChar );
+    }
+    else if ( RChar[0] == 'L' ) Lock();
+  }
+
+  //Checks lock state and executes lock function
+  void Lock()
+  {
+    if ( RChar[1] == '1' ){
+      //Closes lock
+      digitalWrite(lock, HIGH);
+    }
+    else if ( RChar[1] == '0' ){
+      //Opens lock
+      digitalWrite( lock, LOW );
+    }
+  }
