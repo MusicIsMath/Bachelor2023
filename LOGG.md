@@ -293,48 +293,36 @@ String Sdata;
   }
 ```
 
-### Master Arduino(Tool) prototype:
+### Master Arduino(Tool) TEMPLATE:
 ```
 //setting first char in char array to '0' clears whole array
-char SMymessage[1];
+
+//Char that will represent what type of tool
+char Tool[] = "M";
 char RMymessage[9];
 
-float x, y, z;
-  
   void setup()
   {
     Serial.begin(9600);
-    pinMode(9, OUTPUT);
+    SendChar();
   }
-  
+
   void loop()
   {
-    SendChar();
     RecieveChar();
-    
-    UpdatePos();
     
     delay(500);
   }
 
-//Recieve and Send data between Arduinos
+  //Recieve data between Arduinos
   void RecieveChar()
   {
     //the number stands for how many char it will read
     Serial.readBytes(RMymessage,10);
-    
   }
- 
+  //Send data between Arduinos
   void SendChar()
   {
-    Serial.write(SMymessage);
-  }
-
-//Recieve position
-  void UpdatePos()
-  {
-    x = RMymessage[1];
-    y = RMymessage[2];
-    z = RMymessage[3];
+    Serial.write(Tool);
   }
 ```
