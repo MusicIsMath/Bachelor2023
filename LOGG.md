@@ -345,11 +345,10 @@ parser.on('data', (data) => {
 
 port.on('open', () => {
     console.log('Serial port is open')
-    port.write('A')
 });
 ```
 
-### Arduino / c++ code:
+#### Arduino / c++ code:
 ```
 int percent = 0;
 int prevPercent = 0;
@@ -378,3 +377,12 @@ void loop() {
 
 }
 ```
+
+Alot of the code is from previous days of testing, the only "new" thing is that we have now added code for sending information from the javascript server / raspberry pi (in the upcomming future)
+
+We tested this by sending the char 'A' from the server to the arduino board, and in the arduino's code we turn on a lamp if the SerialRead == 'A'
+
+
+https://user-images.githubusercontent.com/112080849/212879175-1c93da63-7cb8-4d08-9f8c-46906f06036c.mp4
+
+
