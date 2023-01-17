@@ -385,4 +385,5 @@ We tested this by sending the char 'A' from the server to the arduino board, and
 
 https://user-images.githubusercontent.com/112080849/212879175-1c93da63-7cb8-4d08-9f8c-46906f06036c.mp4
 
-
+#### Planlegning:
+![image](https://user-images.githubusercontent.com/112080849/212896021-5093b116-e801-4eb7-a6a5-ed3a46e3085f.png)
