@@ -387,3 +387,48 @@ https://user-images.githubusercontent.com/112080849/212879175-1c93da63-7cb8-4d08
 
 #### Planlegning:
 ![image](https://user-images.githubusercontent.com/112080849/212896021-5093b116-e801-4eb7-a6a5-ed3a46e3085f.png)
+
+#### NEW TOOL TEMPLATE 3000!:
+```
+//setting first char in char array to '0' clears whole array
+
+//Char that will represent what type of tool
+char tool[] = "E";
+char RChar[5];
+
+  void setup()
+  {
+    Serial.begin( 9600 );
+    delay( 10 );
+    SendChar( tool );
+  }
+
+  void loop()
+  {
+    if ( Serial.available() ){
+      RecieveChar();
+      
+      Read();
+    }
+    delay( 5000 );   
+  }
+
+  //Recieve data between Arduinos
+  void RecieveChar()
+  {
+    //The number stands for how many char it will read
+    Serial.readBytes( RChar, 4 );
+  }
+  //Send data between Arduinos
+  void SendChar( char text[] )
+  {
+    Serial.write( text );
+  }
+  
+  //Reads recived string and checks what it includes
+  void Read()
+  {
+    if ( RChar[0] == 'M' ){
+      
+    }
+  } ```
