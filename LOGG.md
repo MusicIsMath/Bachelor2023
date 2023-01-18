@@ -433,7 +433,7 @@ char RChar[5];
     }
   }
 
-
+```
 #### Updated slave arduino(with lock function):
 ```
 //Has to always be 1 bigger than message recieving
