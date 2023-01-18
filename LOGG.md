@@ -504,3 +504,55 @@ int lock = 2;
     }
   }
 ```
+
+### 18.01.23
+### write chars from localhost to turn on lights on the arduino:
+#### JS code:
+```
+//-----Express framework for node.js:-----
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+//----------------------------------------
+
+
+//-----Initialising of serialport for arduino com-----
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+const parser = new ReadlineParser();
+port.pipe(parser);
+//----------------------------------------------------
+
+//------html code------------------------------------
+app.get('/', function(req, res) {
+  res.send(`
+    <form action="/" method="POST">
+      <label>Enter a character:</label>
+      <input type="text" name="character">
+      <button type="submit">Submit</button>
+    </form>
+  `);
+});
+//----------------------------------------------------
+
+
+app.listen(3000, function() {
+    console.log('Server listening on port 3000');
+  });
+  
+parser.on('data', (data) => {
+    console.log(data);
+    
+});
+
+port.on('open', () => {
+    console.log('Serial port is open')
+});
+
+app.post('/', function(req, res) {
+    const character = req.body.character || 'X';    //use X if no char has been entered
+    port.write(character)                           //writes the char to the arduino via the serialport
+    console.log(character);                         //logs the char in terminal for easier debugging
+});
+```
