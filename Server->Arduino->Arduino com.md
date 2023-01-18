@@ -230,6 +230,7 @@ We can now send a string that contains information from the localhost:3000 to th
 So when the tool (slave) is connected we recieve a char, for example 'A'. This will be used to tell the server / system what tool just get connected to the CNC
 
 Example of sending information:
+
 ![image](https://user-images.githubusercontent.com/112080849/213180595-677927b7-3080-49d7-9e95-4d4fd7beef36.png)
 
 This "code" message, means "M" for message, 1 for turning on light 1, 2 for light 2 etc...
