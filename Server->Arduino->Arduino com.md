@@ -225,3 +225,13 @@ app.listen(3000, function() {
     console.log('Server listening on port 3000');
 });
   ```
+## simple explanation of what this has achieved:
+We can now send a string that contains information from the localhost:3000 to the tool and from the tool back to the server.
+So when the tool (slave) is connected we recieve a char, for example 'A'. This will be used to tell the server / system what tool just get connected to the CNC
+
+Example of sending information:
+![image](https://user-images.githubusercontent.com/112080849/213180595-677927b7-3080-49d7-9e95-4d4fd7beef36.png)
+
+This "code" message, means "M" for message, 1 for turning on light 1, 2 for light 2 etc...
+
+When we click submit, we see the lights turn on, on the tool-arduino as expected. This will be used to send information for the raspberry pi to the tool currently connected. As we now will know what tool it is, and the tool will recieve information in the form of user innput.
