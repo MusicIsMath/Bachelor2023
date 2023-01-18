@@ -1,5 +1,7 @@
 # Finnished prototype for communication
 
+![image](https://user-images.githubusercontent.com/112080849/213199854-3f84971f-4d24-4510-b236-72f3c050e286.png)
+
 We are using a javascript / nods.js server. From the server (localhost:3000), we can now innput a string containing info, to for example turn on led-lights on the slave arduino
 
 ## Slave / tool arduino code:
