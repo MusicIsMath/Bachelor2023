@@ -557,3 +557,10 @@ app.post('/', function(req, res) {
     console.log(character);                         //logs the char in terminal for easier debugging
 });
 ```
+
+#### Example:
+
+![image](https://user-images.githubusercontent.com/112080849/213157860-ccf3acf7-37ce-42aa-80e1-e676440e8bdb.png)
+
+![image](https://user-images.githubusercontent.com/112080849/213158357-47b38a29-9fec-4efe-b095-c34b1bc31ab7.png)
+
