@@ -509,23 +509,30 @@ int lock = 2;
 ### write chars from localhost to turn on lights on the arduino:
 #### JS code:
 ```
-//-----Express framework for node.js:-----
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-//----------------------------------------
-
-
-//-----Initialising of serialport for arduino com-----
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
-const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Initialize serial port
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 });
 const parser = new ReadlineParser();
 port.pipe(parser);
-//----------------------------------------------------
 
-//------html code------------------------------------
+// Listen for port to open
+port.on('open', () => {
+    console.log('Serial port is open');
+});
+
+// Listen for incoming data
+parser.on('data', (data) => {
+    console.log(data);
+});
+
+// Handle GET request to root route
 app.get('/', function(req, res) {
   res.send(`
     <form action="/" method="POST">
@@ -535,26 +542,17 @@ app.get('/', function(req, res) {
     </form>
   `);
 });
-//----------------------------------------------------
 
+// Handle POST request to root route
+app.post('/', function(req, res) {
+    const character = req.body.character || 'X';    
+    port.write(character);                           
+    console.log(character); 
+});
 
+// Listen for connections on port 3000
 app.listen(3000, function() {
     console.log('Server listening on port 3000');
-  });
-  
-parser.on('data', (data) => {
-    console.log(data);
-    
-});
-
-port.on('open', () => {
-    console.log('Serial port is open')
-});
-
-app.post('/', function(req, res) {
-    const character = req.body.character || 'X';    //use X if no char has been entered
-    port.write(character)                           //writes the char to the arduino via the serialport
-    console.log(character);                         //logs the char in terminal for easier debugging
 });
 ```
 
@@ -564,3 +562,6 @@ app.post('/', function(req, res) {
 
 ![image](https://user-images.githubusercontent.com/112080849/213158357-47b38a29-9fec-4efe-b095-c34b1bc31ab7.png)
 
+So 'A' = Light 1, 'B' = light 2 etc...
+
+This "system" is a part of the total system, more spesifically the part where we wish to send information (in the form of a string) from the pc, where the system then vil take in this info and do: x,y,z etcetc based on the info.
