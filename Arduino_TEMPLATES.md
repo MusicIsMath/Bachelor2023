@@ -99,13 +99,13 @@ char RChar[5];
   }
   ```
   ```
-  //Master(TOOL)
+//Master(TOOL)
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial(2, 3);
 //setting first char in char array to '0' clears whole array
 //Char that will represent what type of tool
-char tool[] = "E";
+char tool[] = "M123";
 char RChar[5];
 
   void setup()
@@ -119,12 +119,13 @@ char RChar[5];
 
   void loop()
   {
+    for(int i=9;i<12;i++) digitalWrite(i, LOW);
+    digitalWrite(12, HIGH);
+    
     if ( mySerial.available() ){
       Read();
     }
     delay( 3000 );
-    
-    for(int i=9;i<13;i++) digitalWrite(i, LOW);
   }
   //Send data between Arduinos
   void SendChar( char text[] )
@@ -149,7 +150,7 @@ char RChar[5];
     if ( text[2] == '2' ) digitalWrite(10, HIGH);
     if ( text[3] == '3' ) digitalWrite(11, HIGH);
       if ( text[1] == '1' && text[2] == '2' && text[3] == '3' ){
-      digitalWrite(12, HIGH);
+      digitalWrite(12, LOW);
     }
   }
 ```
