@@ -1,5 +1,4 @@
 # Bachelor2023
-![image](https://user-images.githubusercontent.com/117755321/213415089-cd3c861e-a002-4c09-b58d-de40393c7096.png)
 ```
 //SLAVE
 #include <SoftwareSerial.h>
@@ -154,3 +153,4 @@ char RChar[5];
     }
   }
 ```
+![image](https://user-images.githubusercontent.com/117755321/213415089-cd3c861e-a002-4c09-b58d-de40393c7096.png)
