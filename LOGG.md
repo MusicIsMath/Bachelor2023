@@ -565,3 +565,82 @@ app.listen(3000, function() {
 So 'A' = Light 1, 'B' = light 2 etc...
 
 This "system" is a part of the total system, more spesifically the part where we wish to send information (in the form of a string) from the pc, where the system then vil take in this info and do: x,y,z etcetc based on the info.
+
+### 24.01.23
+```
+const express = require('express');
+const bodyParser = require('body-parser');
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Initialize serial ports
+const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
+const port2 = new SerialPort({ path: 'COM6', baudRate: 250000 });
+const parser = new ReadlineParser();
+const parser2 = new ReadlineParser();
+port.pipe(parser);
+port2.pipe(parser2);
+
+// Listen for ports to open
+port.on('open', () => {
+  console.log('Serial port1 is open');
+});
+port2.on('open', () => {
+  console.log('Serial port2 is open');
+});
+
+// Listen for incoming data
+parser.on('data', (data) => {
+  console.log(data);
+});
+parser2.on('data', (data) => {
+  console.log(data);
+});
+
+// Handle GET request to root route
+app.get('/', function(req, res) {
+  res.send(`
+    <form action="/" method="POST">
+      <label>Enter a character:</label>
+      <input type="text" name="character">
+    </form>
+  `);
+});
+
+// Handle POST request to root route
+app.post('/', function(req, res) {
+  const character = req.body.character || 'X';
+  if(character[0]=='M')
+  {
+    port.write(character);
+    console.log(character); 
+  }
+
+  else if(character[0]=='G')
+  {
+    port2.write(character+"\n");
+    console.log(character);
+  }
+
+  else if(character=='Home'||'home')
+  {
+    port2.write('G28 Z Y'+"\n");
+    console.log(character);
+  }
+
+  else if(character=='Demo'||'demo')
+  {
+    port2.write('G0 Z Y F8000'+"\n");
+    console.log(character);
+  }
+});
+
+
+// Listen for connections on port 3000
+app.listen(3000, function() {
+  console.log('Server listening on port 3000');
+});
+```
