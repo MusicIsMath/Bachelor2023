@@ -644,3 +644,160 @@ app.listen(3000, function() {
   console.log('Server listening on port 3000');
 });
 ```
+### 25.01.23
+"completed" code for running 3 demos on the arduino, with input from localhost:3000. One demo for playing a song, one for random aggressive movement and one simulating tool change movement.
+```
+const express = require('express');
+const bodyParser = require('body-parser');
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+const fs = require('fs');
+const app = express();
+let NextOk = true;
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Initialize serial ports
+const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
+const port2 = new SerialPort({ path: 'COM6', baudRate: 250000 });
+const parser = new ReadlineParser();
+const parser2 = new ReadlineParser();
+port.pipe(parser);
+port2.pipe(parser2);
+
+// Listen for ports to open
+port.on('open', () => {
+  console.log('Serial port1 is open');
+});
+port2.on('open', () => {
+  console.log('Serial port2 is open');
+});
+
+// Listen for incoming data
+parser.on('data', (data) => {
+  console.log(data);
+});
+parser2.on('data', (data) => {
+  if(data=='ok')
+  {
+    NextOk = true;
+  }
+  console.log(data);
+});
+
+// Handle GET request to root route
+app.get('/', function(req, res) {
+  res.send(`
+    <form action="/" method="POST">
+      <label>Enter a character:</label>
+      <input type="text" name="character">
+    </form>
+  `);
+});
+
+// Handle POST request to root route
+app.post('/', function(req, res) {
+  const character = req.body.character || 'X';
+  if(character[0]=='M')
+  {
+    port.write(character);
+    console.log(character); 
+  }
+
+  //manully input coordinates
+  else if(character[0]=='G')
+  {
+    port2.write(character+"\n");
+    console.log(character);
+  }
+
+  //position itself at home
+  else if(character=="Home"|| character=="home")
+  {
+    port2.write("G28 Z Y"+"\n");
+    console.log(character);
+  }
+
+  //Reads a gcode file and sends it to the serialport with a buffer
+  else if(character=="Demo1"|| character=="demo1" || character=="joplin") 
+  {
+    fs.readFile('C:\\Users\\joaki\\OneDrive\\Skrivebord\\JOPLIN.txt', 'utf8', (err, data) => {
+      if (err) 
+      {
+          console.log(err);
+      }
+      else 
+      {
+        const lines = data.split('\n');
+        let i = 1;
+        port2.write(lines[0]+'\n');
+        setInterval(()=>{
+          if(NextOk)
+          {
+            port2.write(lines[i]+'\n');
+            console.log(lines[i]);
+            i++;
+            NextOk=false;
+          }
+        },100)
+      }
+    });
+  }
+
+  //random demo
+  else if(character=="Demo2"|| character=="demo2") 
+  {
+    fs.readFile('C:\\Users\\joaki\\OneDrive\\Skrivebord\\demo2.txt', 'utf8', (err, data) => {
+      if (err) 
+      {
+          console.log(err);
+      }
+      else 
+      {
+        const lines = data.split('\n');
+        let i = 1;
+        port2.write(lines[0]+'\n');
+        setInterval(()=>{
+          if(NextOk)
+          {
+            port2.write(lines[i]+'\n');
+            console.log(lines[i]);
+            i++;
+            NextOk=false;
+          }
+        },100)
+      }
+    });
+  }
+
+  //random demo
+  else if(character=="Demo3"|| character=="demo3") 
+  {
+    fs.readFile('C:\\Users\\joaki\\OneDrive\\Skrivebord\\demo3.txt', 'utf8', (err, data) => {
+      if (err) 
+      {
+          console.log(err);
+      }
+      else 
+      {
+        const lines = data.split('\n');
+        let i = 1;
+        port2.write(lines[0]+'\n');
+        setInterval(()=>{
+          if(NextOk)
+          {
+            port2.write(lines[i]+'\n');
+            console.log(lines[i]);
+            i++;
+            NextOk=false;
+          }
+        },100)
+      }
+    });
+  }
+});
+
+// Listen for connections on port 3000
+app.listen(3000, function() {
+  console.log('Server listening on port 3000');
+});
+```
