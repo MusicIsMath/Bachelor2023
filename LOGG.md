@@ -801,3 +801,188 @@ app.listen(3000, function() {
   console.log('Server listening on port 3000');
 });
 ```
+
+### 31.01.23
+#### Implemented, stop, emergancy stop, manual drive, optimised code for running demos:
+#### JS code:
+```
+const express = require('express');
+const bodyParser = require('body-parser');
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+const fs = require('fs');
+const { restart } = require('nodemon');
+const app = express();
+let NextOk = true;
+const home = "G28 Z Y\n";
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Initialize serial ports
+const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
+const port2 = new SerialPort({ path: 'COM6', baudRate: 250000 });
+const parser = new ReadlineParser();
+const parser2 = new ReadlineParser();
+port.pipe(parser);
+port2.pipe(parser2);
+
+// Listen for ports to open
+port.on('open', () => {
+  console.log('Serial port1 is open');
+});
+port2.on('open', () => {
+  console.log('Serial port2 is open');
+});
+
+// Listen for incomming data
+parser.on('data', (data) => {
+  console.log(data);
+});
+parser2.on('data', (data) => {
+  if(data=='ok')
+  {
+    NextOk = true;
+  }
+  console.log(data);
+});
+
+app.use(express.static("public"))
+
+// Handle POST request to root route
+app.post('/', function(req, res) {
+  var character = req.body.character || 'X';
+  var RESTART = req.body.Restartbtn || 'X';
+  var STOP = req.body.Stopbtn || 'X';
+  var ES = req.body.Forcebtn || 'X';
+  let [X_verdi,Y_verdi] = (req.body.xy_input || '-1 -1').split(" ");
+
+  //Emergancy stop
+  if (ES == "force")
+  {
+    port2.write('M112\n');
+  }
+  
+  //manual drive of CNC
+  else if(parseInt(X_verdi) > -1)
+  {
+    port2.write(`G1 Z${X_verdi} Y${Y_verdi} F6000\n`);
+    console.log(`G1 Z${X_verdi} Y${Y_verdi} F6000\n`);
+  }
+
+  //force reset
+  else if(RESTART=="restart")
+  {
+    port2.write('M999\n');
+    if(NextOk)
+    {
+      port2.write(home);
+    }
+    console.log('restart')
+  }
+
+  //stopp after current program
+  else if(STOP=="stop")
+  {
+    port2.write('M999\n');
+    console.log('stop')
+  }
+
+  //send string info to port1 (tool)
+  else if(character[0]=='M')
+  {
+    port.write(character);
+    console.log(character); 
+  }
+
+  //Reads a gcode file and sends it to the serialport with a buffer
+  else if(character.startsWith("demo")) 
+  {
+    var print_delay = 100;
+    if (character=="demo1") print_delay = 20;
+    
+    fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\demo${character.substring(4,5)}.txt`, 'utf8', (err, data) => {
+      if (err) 
+      {
+          console.log(err);
+      }
+      else 
+      {
+        const lines = data.split('\n');
+        let i = 1;
+        port2.write(lines[0]+'\n');
+        setInterval(()=>{
+          if(NextOk)
+          {
+            port2.write(lines[i]+'\n');
+            i++;
+            NextOk=false;
+          }
+        },print_delay)
+      }
+    });
+  }
+});
+
+
+//drives the CNC home at startup
+setTimeout(()=>{
+  port2.write(home);
+},1500)
+
+// Listen for connections on port 3000
+app.listen(3000, function() {
+  console.log('Server listening on port 3000');
+});
+```
+
+#### HTML code:
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <H2>
+        Test website for CNC-machine demo
+
+    </H2>
+
+    <form action="/" method="POST">
+        <button type="submit" name="Restartbtn" value="restart">Restart</button>
+        <button type="submit" name="Stopbtn" value="stop">Stop</button>
+        <button type="submit" name="Forcebtn" value="force">Emergancy stop</button>
+    </form>
+
+    <H3>
+        Coordinate input:
+    </H3>
+    
+    
+    <form action="/" method="POST">
+        <p> 
+        Input format: "x y"                    
+        </p>
+        <H4>
+            XY axsis: <input type="text" name="xy_input">
+        </H4>
+    </form> 
+    
+    
+    <H3>
+        Demo programs:
+    </H3>
+    
+    <P>
+        input a demo: example: demo1
+    </P>
+
+    <form action="/" method="POST">
+        <input type="text" name="character">
+    </form>
+
+</body>
+</html>
+```
