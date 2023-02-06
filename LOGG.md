@@ -986,3 +986,11 @@ app.listen(3000, function() {
 </body>
 </html>
 ```
+
+### 03.02.23
+Tryed inverting the x-axsis on the controller with code. We where able to do this, but we realised that the "home" functions in gcode etc. would still not be inverted, this made our gcode convertion tools uselss, so we decided to keep going with a non inverted axsis
+
+
+### 06.02.23
+Downloaded / got license for fusion 360.
+Updated to localhost:3000 to make it look a bit better
