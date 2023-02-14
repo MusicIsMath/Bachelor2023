@@ -997,3 +997,20 @@ Updated the localhost:3000 to make it look a bit better:
 
 ![image](https://user-images.githubusercontent.com/112080849/216947693-5f2b2799-a08c-4d9e-aa6d-7bcdde7f2830.png)
 
+### 14.02.23
+Implemented code for inverting the x-axsis on the CNC:
+```
+//inverting of x-axsis
+function DriveCNC(Coordinates)
+{
+  const regex = /Z(-?\d+(\.\d+)?)/; // Regular expression to match the Z-value
+  const match = regex.exec(Coordinates);
+  if (match) {
+    const zValue = parseFloat(match[1]);
+    const newZ = 240-zValue;
+    Coordinates = Coordinates.replace(regex, `Z${newZ.toFixed(3)}`);
+  }
+  port2.write(Coordinates);
+  console.log(Coordinates);
+}
+```
