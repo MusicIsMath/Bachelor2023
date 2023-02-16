@@ -1020,6 +1020,7 @@ function DriveCNC(Coordinates)
 -Fixed code (made functions, cleaned up user interface etc)
 -Uploaded code to github (see master branch)
 -Started working on a realistic tool swap protocol:
+
   -Step 1: Send the CNC tool the the correct position for Tool n(1,2,3)
   -Step 2: Recieve feedback that the CNC has arrived at the position
   -Step 3: send "Lock" command from the server to the Tool-arduinos
