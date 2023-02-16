@@ -12,7 +12,7 @@ var data2 = "";
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize serial ports
-const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
+const port = new SerialPort({ path: 'COM5', baudRate: 9600 });
 const port2 = new SerialPort({ path: 'COM6', baudRate: 250000 });
 const parser = new ReadlineParser();
 const parser2 = new ReadlineParser();
@@ -118,6 +118,19 @@ function DriveGcodeFile(Data)
   setInterval(()=>{
     if(NextOk)
     {
+      /*
+      if(i%6==0)
+      {
+        port2.write("M114");
+        NextOk=false;
+      }
+      else                            test av tilbakemelding!
+      {
+        AxsisControl(lines[i]+'\n')
+        i++;
+        NextOk=false;
+      }
+      */
       AxsisControl(lines[i]+'\n')
       i++;
       NextOk=false;
