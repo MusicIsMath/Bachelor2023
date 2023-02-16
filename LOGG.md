@@ -1037,7 +1037,7 @@ More interesting solutions would be:
 - calcualtion that predict the time it will take, then wait a delay that is calculated by the prediciton (this brings other challanges by itself)
 - Using M114 command to recieve the CNC's current position. Currently having a small problem with the buffer and when it would be optimal to send the M114 command
 
-Also made a function to handle every part of sending gcode, and tried running a demo for drawing to see of the axsis-inverter works as intended:
+Also made a function to handle every part of sending gcode, and tried running a demo for drawing to see if the axsis-inverter works as intended:
 
 ![image](https://user-images.githubusercontent.com/112080849/219395579-1b2c2156-fd6b-4019-8345-6e6e4eb92c6f.png)
 
