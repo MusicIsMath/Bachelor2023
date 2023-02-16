@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CNC Machine Demo</title>
+  <style>
+    body {
+      background-color: #F0F0F0;
+    }
+    h2, h3, p {
+      text-align: center;
+    }
+    h2 {
+      font-size: 36px;
+      color: #3D3D3D;
+      margin: 40px 0;
+    }
+    h3 {
+      font-size: 24px;
+      color: #3D3D3D;
+      margin: 20px 0;
+    }
+    p {
+      font-size: 18px;
+      color: #9B9B9B;
+      margin: 10px 0;
+    }
+    form {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    input[type="submit"], input[type="text"] {
+      width: 250px;
+      height: 50px;
+      font-size: 18px;
+      margin: 10px;
+      padding: 0 10px;
+      border: none;
+      border-radius: 20px;
+      color: #FFFFFF;
+      background-color: #9B9B9B;
+    }
+    input[type="submit"][name="Restartbtn"] {
+      width: 150px;
+      cursor: pointer;
+      background-color: #00FF00;
+    }
+    input[type="submit"][name="Forcebtn"] {
+      width: 150px;
+      cursor: pointer;
+      background-color: #FF0000;
+    }
+  </style>
+</head>
+<body>
+  <h2>CNC Machine Demo</h2>
+
+  <form action="/" method="post">
+    <input type="submit" name="Restartbtn" value="Home">
+    <input type="submit" name="Forcebtn" value="Emergency Stop">
+  </form>
+
+  <h3>Coordinate Input</h3>
+  <p>Input format: "x y"</p>
+
+  <form action="/" method="post">
+    <input type="text" name="xy_input" placeholder="XY axis">
+  </form>
+
+  <h3>Demo Programs</h3>
+  <p>Input format: "demo1/2/3..."</p>
+
+  <form action="/" method="post">
+    <input type="text" name="character" placeholder="Enter demo program">
+  </form>
+</body>
+</html>
