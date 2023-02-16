@@ -1014,3 +1014,12 @@ function DriveCNC(Coordinates)
   console.log(Coordinates);
 }
 ```
+
+### 16.02.23
+#### server / JS
+-Fixed code (made functions, cleaned up user interface etc)
+-Started working on a realistic tool swap protocol
+-Uploaded code to github (see master branch)
+
+#### Arduino / tool
+
