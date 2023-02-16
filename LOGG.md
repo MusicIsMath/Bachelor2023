@@ -1032,9 +1032,10 @@ function DriveCNC(Coordinates)
 We have soon come to realise that step 2, recieving live feedback will be a challange, a easy fix would be using sensors like:
 - encoders on the x-axsis and y-axsis
 - A camera detecting position live and sending it to the server
+- 
 More interesting solutions would be: 
--calcualtion that predict the time it will take, then wait a delay that is calculated by the prediciton (this brings other challanges by itself)
--Using M114 command to recieve the CNC's current position. Currently having a small problem with the buffer and when it would be optimal to send the M114 command
+- calcualtion that predict the time it will take, then wait a delay that is calculated by the prediciton (this brings other challanges by itself)
+- Using M114 command to recieve the CNC's current position. Currently having a small problem with the buffer and when it would be optimal to send the M114 command
 
 #### Arduino / tool
 
