@@ -30,7 +30,7 @@ port2.on('open', () => {
 // Listen for incomming data
 parser.on('data', (data) => {
   data1 = data;
-  console.log("I recieved:",data);
+  console.log("Recieved(Tool): ",data);
 });
 parser2.on('data', (data) => {
   data2 = data;
@@ -38,7 +38,7 @@ parser2.on('data', (data) => {
   {
     NextOk = true;
   }
-  console.log("I recieved: ",data);
+  console.log("Recieved(CNC): ",data);
 });
 
 app.use(express.static("public"))
@@ -76,7 +76,7 @@ app.post('/', function(req, res) {
   else if(request[0]=='M' || request[0]=='L' || request[0]=='S')
   {
     port.write(request);
-    console.log("I sendt: ",request); 
+    console.log("Sendt: ",request); 
   }
 
   //Reads a gcode file and sends it to the serialport with a buffer
@@ -142,7 +142,7 @@ function AxsisControl(Coordinates)
     Coordinates = Coordinates.replace(regexZ, `Z${newZ.toFixed(3)}`).replace(regexY, `Y${newY.toFixed(3)}`);
   }
   port2.write(Coordinates);
-  console.log("I sendt: ", Coordinates);
+  console.log("Sendt: ", Coordinates);
 }
 
 //drives the CNC home at startup
