@@ -7,8 +7,6 @@ const { restart } = require('nodemon');
 const app = express();
 let NextOk = true;
 const home = "G28 Z Y\n";
-var data1 = "";
-var data2 = "";
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize serial ports
@@ -29,11 +27,13 @@ port2.on('open', () => {
 
 // Listen for incomming data
 parser.on('data', (data) => {
-  data1 = data;
   console.log("Recieved(Tool): ",data);
+  if (data.trim() === 'F') {
+    FresProgram();
+  }
+
 });
-parser2.on('data', (data) => {
-  data2 = data;
+parser2.on('data', (data) => {;
   if(data=='ok')
   {
     NextOk = true;
@@ -45,7 +45,7 @@ app.use(express.static("public"))
 
 // Handle POST request to root route
 app.post('/', function(req, res) {
-  var request = 
+  var request = //whatever value comes inn from local host, save it in "request"
   req.body.character 
   || req.body.Restartbtn 
   || req.body.Forcebtn
@@ -80,7 +80,7 @@ app.post('/', function(req, res) {
   }
 
   //Reads a gcode file and sends it to the serialport with a buffer
-  else if(request.startsWith("demo")||request.startsWith("tool")) 
+  else if(request.startsWith("demo")) 
   {   
     fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\${request}.txt`, 'utf8', (err, data) => {
       if (err) 
@@ -91,6 +91,25 @@ app.post('/', function(req, res) {
       {
         DriveGcodeFile(data);
         console.log('\x1b[33m%s\x1b[0m','Estimated time: '+EstimateTime(data)+'s'); //writes it in the terminal in yellow so its easier to find
+      }
+    });
+  }
+
+  else if(request.startsWith("tool")) 
+  {   
+    var Delay = 0;
+    fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\${request}.txt`, 'utf8', (err, data) => {
+      if (err) 
+      {
+          console.log(err);
+      }
+      else 
+      {
+        DriveGcodeFile(data);
+        console.log('\x1b[33m%s\x1b[0m','Estimated time: '+EstimateTime(data)+'s'); //writes it in the terminal in yellow so its easier to find
+        setTimeout(()=>{
+          port.write('L');
+        },EstimateTime(data)*1000)
       }
     });
   }
@@ -192,6 +211,21 @@ function EstimateTime(GcodeFile)
     }
   }
   return (Math.round(Time * 100) / 100).toFixed(2); //two decimals
+}
+
+function FresProgram()
+{
+  port.write("M90");
+  fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\fres.txt`, 'utf8', (err, data) => {
+    if (err) 
+    {
+        console.log(err);
+    }
+    else 
+    {
+      DriveGcodeFile(data);
+    }
+  });
 }
 //drives the CNC home at startup
 setTimeout(()=>{
