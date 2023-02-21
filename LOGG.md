@@ -1043,4 +1043,156 @@ Also made a function to handle every part of sending gcode, and tried running a 
 
 
 #### Arduino / tool
+//Master(TOOL)
+#include <SoftwareSerial.h>
 
+SoftwareSerial mySerial(2, 3);
+//setting first char in char array to '0' clears whole array
+//Char that will represent what type of tool
+bool tool = false;
+
+void setup()
+{
+  mySerial.begin(9600);
+  Serial.begin(9600);
+  delay(10);
+  for(int i=9;i<13;i++) pinMode(i, OUTPUT);
+}
+
+void loop()
+{
+  digitalWrite(12, HIGH);
+  if(!tool){
+    mySerial.println("S");
+    tool = true;
+  }
+
+  if (mySerial.available()){
+    Read();
+  }
+  delay(10);
+}
+//Send data between Arduinos
+void SendChar(char text[])
+{
+  mySerial.println(text);
+}
+//Reads recived string and checks what it includes
+void Read()
+{
+  char text[5];
+   //The number stands for how many char it will read
+  mySerial.readBytes(text, 4);
+  if (text[0] == 'M'){
+    Led(text);
+  }
+}
+//Turns on LED dependent on cryptic code
+void Led(char text[])
+{
+  if (text[1] == '1') digitalWrite(9, HIGH);
+  if (text[2] == '2') digitalWrite(10, HIGH);
+  if (text[3] == '3') digitalWrite(11, HIGH);
+    if (text[1] == '1' && text[2] == '2' && text[3] == '3'){
+      digitalWrite(12, LOW);
+  }
+  delay(500);
+  for(int i=9;i<12;i++) digitalWrite(i, LOW);
+}
+
+//SLAVE
+#include <SoftwareSerial.h>
+#include <Servo.h>
+SoftwareSerial mySerial(2, 3);
+// create servo object to control a servo
+Servo lock;
+// variable to store new servo position
+int Npos;
+// variable to store current servo position
+int Cpos = 0;
+//Lock state
+bool LockState;
+
+  void setup() 
+  {
+    Serial.begin(9600);
+    mySerial.begin(9600);
+    //Sets pinMode for lock function
+    lock.attach(9);
+    delay(10);
+    lock.write(Cpos);
+  }
+
+  void loop() 
+  {
+    //Recieve data between Arduinos
+    if(mySerial.available()){
+      delay(10);
+      char text[1];
+      //The number stands for how many char it will read
+      //Will wait till there is that many char to read
+      mySerial.readBytes(text, 1);
+      Read(text);
+    }
+    //Recieve data between Arduino to rasPI
+    if(Serial.available()){
+      delay(10);
+      char text[5];
+      //The number stands for how many char it will read
+      //Will wait till there is that many char to read
+      Serial.readBytes(text, 4);
+      Read(text);
+    }
+    delay(10);
+  }
+  //Reads recived string and checks what it includes
+  void Read(char text[])
+  {
+    if (text[0] == 'M'){
+      mySerial.println(text);
+    }
+    else if (text[0] == 'S' || text[0] == 'E' || text[0] == 'F'){ 
+      Serial.println(text);
+    }
+    else if (text[0] == 'L') Lock();
+  }
+  //Checks lock state and executes lock function
+  void Lock()
+  {
+    //Closes lock
+    if(Cpos < 90){
+      Npos = 90;
+      lock.write(Npos);
+      int time = millis();
+      while(mySerial.available() == 0 && (millis() - time) < 5000){
+        if(Serial.available()){
+          char text[4];
+          Serial.readBytes(text, 4);
+          Read(text);
+        }
+      }
+      if(mySerial.available()){
+        LockState = true;
+        char text[1];
+        mySerial.readBytes(text,1);
+        Read(text);
+      }
+      else{
+        Npos = 0;
+        lock.write(Npos);
+      }
+    }
+    //Opens lock
+    else if(Cpos > 0){
+      Npos = 0;
+      lock.write(Npos);
+      LockState = false;
+    }
+    Cpos = Npos;
+  }
+
+![IMG_0027](https://user-images.githubusercontent.com/117755321/220314766-72da6dfa-89e5-480c-a5da-1cef76dfaa9e.jpeg)
+
+- Låse funksjon lagt til
+- Etter forsøk på låsing, hvis det ikke kommer kommunikasjon etter 3 sekunder fra tool, vil låsen åpnes igjen
+- Tool som sier hvilket verktøy det er
