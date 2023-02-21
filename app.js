@@ -191,7 +191,7 @@ function EstimateTime(GcodeFile)
       }
     }
   }
-  return (Math.round(Time * 100) / 100).toFixed(2);
+  return (Math.round(Time * 100) / 100).toFixed(2); //two decimals
 }
 //drives the CNC home at startup
 setTimeout(()=>{
