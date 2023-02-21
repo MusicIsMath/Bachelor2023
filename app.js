@@ -12,7 +12,7 @@ var data2 = "";
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize serial ports
-const port = new SerialPort({ path: 'COM5', baudRate: 9600 });
+const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
 const port2 = new SerialPort({ path: 'COM6', baudRate: 250000 });
 const parser = new ReadlineParser();
 const parser2 = new ReadlineParser();
@@ -52,7 +52,6 @@ app.post('/', function(req, res) {
   || req.body.Tool1 || req.body.Tool2 || req.body.Tool3
   || 'Not Defined!';
   let [X_verdi,Y_verdi] = (req.body.xy_input || '-1 -1').split(" ");
-
   //Emergancy stop
   if (request == "Emergency Stop")
   {
@@ -80,9 +79,9 @@ app.post('/', function(req, res) {
   }
 
   //Reads a gcode file and sends it to the serialport with a buffer
-  else if(request.startsWith("demo")) 
+  else if(request.startsWith("demo")||request.startsWith("tool")) 
   {   
-    fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\demo${request.substring(4,5)}.txt`, 'utf8', (err, data) => {
+    fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\${request}.txt`, 'utf8', (err, data) => {
       if (err) 
       {
           console.log(err);
@@ -90,20 +89,7 @@ app.post('/', function(req, res) {
       else 
       {
         DriveGcodeFile(data);
-      }
-    });
-  }
-
-  else if(request.startsWith("tool"))
-  {
-    fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\tool${request.substring(4,5)}.txt`, 'utf8', (err, data) => {
-      if (err) 
-      {
-          console.log(err);
-      }
-      else 
-      {
-        DriveGcodeFile(data)
+        EstimateTime(data);
       }
     });
   }
@@ -116,21 +102,8 @@ function DriveGcodeFile(Data)
   let i = 1;
   AxsisControl(lines[0]+'\n')
   setInterval(()=>{
-    if(NextOk)
+    if(NextOk && (i<lines.length))
     {
-      /*
-      if(i%6==0)
-      {
-        port2.write("M114");
-        NextOk=false;
-      }
-      else                            test av tilbakemelding!
-      {
-        AxsisControl(lines[i]+'\n')
-        i++;
-        NextOk=false;
-      }
-      */
       AxsisControl(lines[i]+'\n')
       i++;
       NextOk=false;
@@ -158,6 +131,67 @@ function AxsisControl(Coordinates)
   console.log("Sendt: ", Coordinates);
 }
 
+//estmiates the time it will take to complete the Gcode
+function EstimateTime(GcodeFile)
+{
+  const lines = GcodeFile.split('\n');
+  var Z_Values = [240];
+  var Y_Values = [0];
+  var F_Values = [0];
+  var Time = 0;
+  for(let i = 0; i<lines.length; i++)
+  {
+    const regexZ = /Z(-?\d+(\.\d+)?)/; // Regular expression to match the Z-value
+    const regexY = /Y(-?\d+(\.\d+)?)/; // Regular expression to match the Y-value
+    const regexF = /F(-?\d+(\.\d+)?)/; // Regular expression to match the F-value
+    const matchZ = regexZ.exec(lines[i]);
+    const matchY = regexY.exec(lines[i]);
+    const matchF = regexF.exec(lines[i]);
+    if(matchZ)
+    {
+      const zValue = parseFloat(matchZ[1]);
+      Z_Values.push(zValue);
+    }
+    if(matchY)
+    {
+      const yValue = parseFloat(matchY[1]);
+      Y_Values.push(yValue);
+    }
+    if(matchF)
+    {
+      const fValue = parseFloat(matchF[1]);
+      F_Values.push(fValue);
+    }
+  }
+  for(let j = 0; j<Z_Values.length-1; j++)  //Check the lenght of the Z-axsis array, as we then avoid the problem of calculating with empty lines
+  {
+    let Z_diff = Math.abs(Z_Values[j]-Z_Values[j+1]);
+    let Y_diff = Math.abs(Y_Values[j]-Y_Values[j+1]);
+    if(Z_diff>Y_diff)                       //The time will always be based on the axsis that has to travel the furtest
+    {
+      Time += (Z_diff/F_Values[j+1])*60;    //Mathematical formula for time based on start / end and speed, 60 is a constant derived from timing the CNC
+      if (j>=1)
+      {
+        if(Math.sign(Z_Values[j-1]-Z_Values[j])!=Math.sign(Z_Values[j]-Z_Values[j+1]))  //Checks if the CNC changes direction to compensate for acceleration time
+        {
+          Time+=0.73; //acceleration time
+        }
+      }
+    }
+    else
+    {
+      Time += (Y_diff/F_Values[j+1])*60;
+      if (j>=1)
+      {
+        if(Math.sign(Y_Values[j-1]-Y_Values[j])!=Math.sign(Y_Values[j]-Y_Values[j+1]))
+        {
+          Time+=0.73;
+        }
+      }
+    }
+  }
+  console.log("Estimated time: "+Time);
+}
 //drives the CNC home at startup
 setTimeout(()=>{
   port2.write(home);
