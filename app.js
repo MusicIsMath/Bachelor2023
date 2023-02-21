@@ -52,6 +52,7 @@ app.post('/', function(req, res) {
   || req.body.Tool1 || req.body.Tool2 || req.body.Tool3
   || 'Not Defined!';
   let [X_verdi,Y_verdi] = (req.body.xy_input || '-1 -1').split(" ");
+
   //Emergancy stop
   if (request == "Emergency Stop")
   {
@@ -66,7 +67,7 @@ app.post('/', function(req, res) {
   }
 
   //restart
-  else if(request=="restart")
+  else if(request=="Home")
   {
     port2.write(home);
   }
@@ -89,7 +90,7 @@ app.post('/', function(req, res) {
       else 
       {
         DriveGcodeFile(data);
-        EstimateTime(data);
+        console.log('\x1b[33m%s\x1b[0m','Estimated time: '+EstimateTime(data)+'s'); //writes it in the terminal in yellow so its easier to find
       }
     });
   }
@@ -190,7 +191,7 @@ function EstimateTime(GcodeFile)
       }
     }
   }
-  console.log("Estimated time: "+Time);
+  return (Math.round(Time * 100) / 100).toFixed(2);
 }
 //drives the CNC home at startup
 setTimeout(()=>{
