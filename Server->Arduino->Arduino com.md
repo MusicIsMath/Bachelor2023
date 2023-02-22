@@ -6,177 +6,161 @@ We are using a javascript / nods.js server. From the server (localhost:3000), we
 
 ## Slave / tool arduino code:
 ```
+//SLAVE
 #include <SoftwareSerial.h>
-
-SoftwareSerial mySerial(2, 3);
-//setting first char in char array to '0' clears whole array
-//Char that will represent what type of tool
-char tool[] = "E";
-char RChar[20];
-
-  void setup()
-  {
-    Serial.begin( 9600 );
-    mySerial.begin( 9600 );
-    delay( 10 );
-    SendChar( tool );
-    pinMode(9, OUTPUT);
-    pinMode(10, OUTPUT);
-    pinMode(11, OUTPUT);
-    pinMode(12, OUTPUT);
-  }
-
-  void loop()
-  {
-    if ( mySerial.available() ){
-      RecieveChar();
-
-      Read();
-    }
-    delay( 3000 );
-    digitalWrite(9, LOW);
-    digitalWrite(10, LOW);
-    digitalWrite(11, LOW);
-    digitalWrite(12, LOW);
-  }
-
-  //Recieve data between Arduinos
-  void RecieveChar()
-  {
-    //The number stands for how many char it will read
-
-    int j = mySerial.available();
-    for ( int i = 0; i < j; i++ )
-    {
-      RChar[i] = mySerial.read();
-    }
-    Serial.println(RChar);
-    Serial.println(j);
-  }
-  //Send data between Arduinos
-  void SendChar( char text[] )
-  {
-    mySerial.println( text );
-  }
-
-  //Reads recived string and checks what it includes
-  void Read()
-  {
-    if ( RChar[0] == 'M' ){
-      Led();
-    }
-    delay(1000);
-    RChar[0] = 0;
-  }
-
-  void Led()
-  {
-    if ( RChar[1] == '1' ) digitalWrite(9, HIGH);
-    if ( RChar[2] == '2' ) digitalWrite(10, HIGH);
-    if ( RChar[3] == '3' ) digitalWrite(11, HIGH);
-      if ( RChar[1] == '1' && RChar[2] == '2' && RChar[3] == '3' ){
-      digitalWrite(12, HIGH);
-    }
-  }
-  ```
-  ## master / cnc tool arduino code:
-  ```
-  #include <SoftwareSerial.h>
 #include <Servo.h>
-SoftwareSerial mySerial(2, 3);
-// create servo object to control a servo
-Servo lock;
-// variable to store new servo position
-int Npos;
-// variable to store current servo position
-int Cpos = 0;
-//Lock state
-bool LockState;
-
-//Has to always be 1 bigger than message recieving
-char RChar[5];
+SoftwareSerial SerialArduino(2, 3);
+Servo lock; // create servo object to control a servo
+int Npos; // variable to store new servo position
+int Cpos = 0; // variable to store current servo position
 
   void setup() 
   {
-    Serial.begin( 9600 );
-    mySerial.begin( 9600 );
-    //Sets pinMode for lock function
-    lock.attach(13);
-    lock.write( Cpos );
+    Serial.begin(9600);
+    SerialArduino.begin(9600);
+    lock.attach(9); //Sets pinMode for lock function
+    lock.write(Cpos);
   }
 
   void loop() 
   {
-    if( mySerial.available() ){
-      myRecieveChar();
-
-      Read();
+    //Recieve data between Arduinos
+    if(SerialArduino.available()){
+      ReadSerialArduino();
     }
-    if( Serial.available() ){
-      RecieveChar();
-
-      Read();
+    //Recieve data between Arduino to rasPI
+    if(Serial.available()){
+      ReadSerial();
     }
-
-    delay( 300 );
+    delay(10);
   }
-
-  //Recieve data between Arduinos and to rasPI
-  void myRecieveChar()
-  {
-    //The number stands for how many char it will read
-    //Will wait till there is that many char to read
-    mySerial.readBytes(RChar, 4);
-  }
-  void RecieveChar()
-  {
-    //The number stands for how many char it will read
-    //Will wait till there is that many char to read
-    Serial.readBytes(RChar, 4);
-  }
-
-  //Send data between Arduinos
-  void SendChar( char text[] )
-  {
-    mySerial.println( text );
-  }
-
-  //Send data between Arduino and RasPI
-  void SendData( char text[] )
-  {
-    Serial.println( text );
-  }
-
   //Reads recived string and checks what it includes
-  void Read()
+  void Read(char c, char text[])
   {
-    if ( RChar[0] == 'M' ){
-      SendChar( RChar );
+    if (c == 'M'){
+      SerialArduino.println(text);
     }
-    else if ( RChar[0] == 'E' || RChar[0] == 'F' ){ 
-      SendData( RChar );
+    else if (c == 'S' || c == 'E' || c == 'F'){ 
+      Serial.println(c);
     }
-    else if ( RChar[0] == 'L' ) Lock();
+    else if (c == 'L') Lock();
   }
-
+  //Read Serial from Arduino
+  void ReadSerialArduino()
+  {
+    char c = SerialArduino.read();
+    char text[SerialArduino.available()];
+    if(SerialArduino.available() > 0){
+      SerialArduino.readBytes(text, SerialArduino.available());
+    }
+    Read(c, text);
+  }
+  //Read Serial
+  void ReadSerial()
+  {
+    char c = Serial.read();
+    char text[Serial.available()];
+    if(Serial.available() > 0){
+      Serial.readBytes(text, Serial.available());
+    }
+    Read(c, text);
+  }
   //Checks lock state and executes lock function
   void Lock()
   {
     //Closes lock
-    if( Cpos < 90 ){
+    if(Cpos < 90){
       Npos = 90;
-      lock.write( Npos );
-      Cpos = Npos;
-      LockState = true;
+      lock.write(Npos);
+      int time = millis();
+      while(SerialArduino.available() == 0 && (millis() - time) < 5000);
+      if(SerialArduino.available()){
+        ReadSerialArduino();
+      }
+      else{
+        Npos = 0;
+        lock.write(Npos);
+      }
     }
     //Opens lock
-    else if( Cpos > 0 ){
+    else if(Cpos > 0){
       Npos = 0;
-      lock.write( Npos );
-      Cpos = Npos;
-      LockState = false;
+      lock.write(Npos);
     }
+    Cpos = Npos;
   }
+  ```
+  ## master / cnc tool arduino code:
+  ```
+//Master(TOOL)
+#include <SoftwareSerial.h>
+#include <Servo.h>
+SoftwareSerial SerialArduino(2, 3);
+//setting first char in char array to '0' clears whole array
+//Char that will represent what type of tool
+bool tool = false;
+
+Servo fres;
+
+int pos = 0;
+
+void setup()
+{
+  SerialArduino.begin(9600);
+  delay(10);
+  for(int i=9;i<13;i++) pinMode(i, OUTPUT);
+  fres.attach(6);
+}
+
+void loop()
+{
+  digitalWrite(12, HIGH);
+
+  if(!tool){
+    SerialArduino.println('S');
+    tool = true;
+  }
+
+  if (SerialArduino.available()){
+    ReadSerialArduino();
+  }
+  delay(10);
+}
+//Reads recived string and checks what it includes
+void Read(char c, char text[])
+{
+  if (c == 'M'){
+    Led(text);
+  }
+  else if (c == 'F'){ 
+    StartFres(text);
+  }
+}
+//Read Serial from Arduino
+void ReadSerialArduino()
+{
+  char c = SerialArduino.read();
+  char text[SerialArduino.available()];
+  if(SerialArduino.available() > 0){
+    SerialArduino.readBytes(text, SerialArduino.available());
+  }
+  Read(c, text);
+}
+void StartFres(char text[])
+{
+  if(text[0] == '0'){
+    fres.write(0);
+  }
+  else{
+    fres.write(text);
+  }
+}
+//Turns on LED dependent on cryptic code
+void Led(char text[])
+{
+  if (text[1] == '1') digitalWrite(12, LOW);
+  delay(1000);
+}
   ```
   
   ## server / js code:
