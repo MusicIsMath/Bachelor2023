@@ -1196,3 +1196,18 @@ bool LockState;
 - Låse funksjon lagt til
 - Etter forsøk på låsing, hvis det ikke kommer kommunikasjon etter 3 sekunder fra tool, vil låsen åpnes igjen
 - Tool som sier hvilket verktøy det er
+
+### 24.02.23
+Started 3D printing, first project we decided to make a tool to fasten a pen to the CNC (just to learn how to 3d print + fusion):
+Starting part:
+
+![image](https://user-images.githubusercontent.com/112080849/221177929-fe3f9b86-64c5-4ff9-8a4f-6a794e78b6ef.png)
+
+Then we designed a bracket for the already exsisting piece:
+
+![image](https://user-images.githubusercontent.com/112080849/221178014-b54c3362-298e-4511-9ae4-ef914314247c.png)
+
+sent the 3D design to the printer using Ultimaker ultra and started printing:
+
+![image](https://user-images.githubusercontent.com/112080849/221178270-cb18e214-275c-4c1b-8ddd-076f28f8bc4d.png)
+
