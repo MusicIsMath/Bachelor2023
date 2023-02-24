@@ -1041,9 +1041,15 @@ Also made a function to handle every part of sending gcode, and tried running a 
 
 ![image](https://user-images.githubusercontent.com/112080849/219395579-1b2c2156-fd6b-4019-8345-6e6e4eb92c6f.png)
 
+### 16.02.23
+Made a working time prediction function using simple algebra (start-end)/speed, calculated the constants needed and made another function for calculating time loss on deacceleration and acceleration:
+Check the direction from step(i-1) to step(i) and compare it to: from step(i) to step(i+1), if they change directions, we need to compensate.
+For even more accurate time predictions i could add another function that accounts for changes in speed, think (F1000 - F6000), will also lose time in accelerating
 
 #### Arduino / tool
+
 //Master(TOOL)
+```
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial(2, 3);
@@ -1099,7 +1105,9 @@ void Led(char text[])
   delay(500);
   for(int i=9;i<12;i++) digitalWrite(i, LOW);
 }
+```
 
+```
 //SLAVE
 #include <SoftwareSerial.h>
 #include <Servo.h>
@@ -1190,6 +1198,7 @@ bool LockState;
     }
     Cpos = Npos;
   }
+  ```
 
 ![IMG_0027](https://user-images.githubusercontent.com/117755321/220314766-72da6dfa-89e5-480c-a5da-1cef76dfaa9e.jpeg)
 
