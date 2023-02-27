@@ -1220,3 +1220,10 @@ sent the 3D design to the printer using Ultimaker ultra and started printing:
 
 ![image](https://user-images.githubusercontent.com/112080849/221178270-cb18e214-275c-4c1b-8ddd-076f28f8bc4d.png)
 
+### 27.02.23
+Started designing a locking mechanism for the toolplate / cnc plate:
+
+![image](https://user-images.githubusercontent.com/112080849/221598776-a440d874-fda9-463c-a8f3-0e2b6712ac75.png)
+
+![image](https://user-images.githubusercontent.com/112080849/221598852-e75d784c-8758-4137-a8d7-805af27b02ef.png)
+
