@@ -1227,3 +1227,29 @@ Started designing a locking mechanism for the toolplate / cnc plate:
 
 ![image](https://user-images.githubusercontent.com/112080849/221598852-e75d784c-8758-4137-a8d7-805af27b02ef.png)
 
+![image](https://user-images.githubusercontent.com/112080849/222118922-59f56c9f-eaae-40e7-b3bc-6b80180c4644.png)
+
+This design was:
+* to small
+* not enough tention to hold any decent amount for weight
+
+### 28.02.23
+Designed another itteration of the locking part:
+
+![image](https://user-images.githubusercontent.com/112080849/222119193-21171264-afd5-43c8-a05a-3c3ca7689f5e.png)
+
+* doubled the height
+* Still not enought tention, as i didnt do anything about the bend amount etc
+
+Made yet another design, this time being more precise / reasoned about my design:
+
+![image](https://user-images.githubusercontent.com/112080849/222119737-45763ee3-7aa7-497d-ae24-38424e267889.png)
+
+This design has a way better lock-on, but its still not resiliant in the wrong axsis (gravity force coused by the weight of the tool)
+
+### 01.03.23
+
+Started on a close to final design:
+
+![image](https://user-images.githubusercontent.com/112080849/222120181-b8ad6acb-beae-4fa1-b314-84c2c6b6420d.png)
+
