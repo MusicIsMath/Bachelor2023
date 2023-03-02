@@ -1259,12 +1259,15 @@ Started on a close to final design:
 Started on a final version of the tool-lock where we designed a point where we could fasten it to the CNC:
 
 Female part:
+
 ![image](https://user-images.githubusercontent.com/112080849/222426158-3c66b6cc-87a9-4433-add2-5b252d9be5f6.png)
 
 ![image](https://user-images.githubusercontent.com/112080849/222426220-c35d0c0b-a994-426b-8da3-c2ab8797c325.png)
 
 Male part:
+
 ![image](https://user-images.githubusercontent.com/112080849/222426309-3d50c4a4-a1eb-4685-b8b7-3f3c30c73633.png)
 
 print slice:
+
 ![image](https://user-images.githubusercontent.com/112080849/222426367-108a18c8-edfd-4690-afc8-65b575fd90b3.png)
