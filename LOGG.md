@@ -1271,3 +1271,18 @@ Male part:
 print slice:
 
 ![image](https://user-images.githubusercontent.com/112080849/222426367-108a18c8-edfd-4690-afc8-65b575fd90b3.png)
+
+### 03.03.23
+
+Started on a design on the fasting bracket for the tool to the CNC machine itself:
+
+![image](https://user-images.githubusercontent.com/112080849/222739236-a0216dfb-bc82-4734-9411-a5fa51eef8bf.png)
+
+18 hour long print:
+
+![image](https://user-images.githubusercontent.com/112080849/222739309-ac06535c-060e-4c9d-a5ac-6a9f3575c93f.png)
+
+Started using brim on the print settings and cleaning the surface of the print before each use, to get a smoother surface on the workpiece
+
+![image](https://user-images.githubusercontent.com/112080849/222744115-04d8bed0-581d-4b6d-8ca5-d53d2c28057d.png)
+
