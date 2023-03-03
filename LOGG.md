@@ -1284,5 +1284,3 @@ Started on a design on the fasting bracket for the tool to the CNC machine itsel
 
 Started using brim on the print settings and cleaning the surface of the print before each use, to get a smoother surface on the workpiece
 
-![image](https://user-images.githubusercontent.com/112080849/222744115-04d8bed0-581d-4b6d-8ca5-d53d2c28057d.png)
-
