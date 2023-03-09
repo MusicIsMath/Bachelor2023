@@ -5,13 +5,12 @@ const { ReadlineParser } = require('@serialport/parser-readline')
 const fs = require('fs');
 const { restart } = require('nodemon');
 const app = express();
-let NextOk = true;
-const home = "G28 Z Y\n";
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize serial ports
 const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
-const port2 = new SerialPort({ path: 'COM6', baudRate: 250000 });
+const port2 = new SerialPort({ path: 'COM5', baudRate: 115200 });
 const parser = new ReadlineParser();
 const parser2 = new ReadlineParser();
 port.pipe(parser);
@@ -33,12 +32,28 @@ parser.on('data', (data) => {
   }
 
 });
-parser2.on('data', (data) => {;
-  if(data=='ok')
-  {
-    NextOk = true;
-  }
+parser2.on('data', (data) => {
   console.log("Recieved(CNC): ",data);
+  if (data.includes('<Run,MPos:'))
+  {
+    setTimeout(function() {
+      port2.write('?\n')
+    }, 2000);
+  }
+
+  else if (data.includes('<Idle,MPos:'))
+  {
+   console.log("THE CNC HAS ARRIVED AT END STOP!!!");
+   port.write('L');
+  }
+
+  if(data.includes("ALARM: Homing fail"))
+  {
+  setTimeout(function() {
+    port2.write('$H\n')
+    port2.write('G92 X0 Y0 Z0\n')
+  }, 1500);
+  }
 });
 
 app.use(express.static("public"))
@@ -50,37 +65,38 @@ app.post('/', function(req, res) {
   || req.body.Restartbtn 
   || req.body.Forcebtn
   || req.body.Tool1 || req.body.Tool2 || req.body.Tool3
+  || req.body.xy_input
   || 'Not Defined!';
-  let [X_verdi,Y_verdi] = (req.body.xy_input || '-1 -1').split(" ");
 
+  console.log('Sendt data: ',request)
   //Emergancy stop
   if (request == "Emergency Stop")
   {
-    port2.write('M112\n');
-    console.log("Emergancy stop pressed!")
+    port2.write('\x18');
+    console.log('\x1b[31m%s\x1b[0m', 'ESTOP CNC ACTIVATED!');
   }
   
   //manual drive of CNC
-  else if(parseInt(X_verdi) > -1)
+  else if(request.startsWith('G')||request.startsWith('$')||request.startsWith('M')||request.startsWith('?')||request.startsWith('~'))
   {
-    AxsisControl(`G1 Z${X_verdi} Y${Y_verdi} F6000\n`);
+    port2.write(request+'\n');
   }
 
   //restart
   else if(request=="Home")
   {
-    port2.write(home);
+    port2.write('$H\n');
+    port2.write('G92 X0 Y0 Z0\n');
   }
 
   //send string info to port1 (tool)
   else if(request[0]=='M' || request[0]=='L' || request[0]=='S')
   {
     port.write(request);
-    console.log("Sendt: ",request); 
   }
 
   //Reads a gcode file and sends it to the serialport with a buffer
-  else if(request.startsWith("demo")) 
+  else if(request.startsWith("demo")|| request.startsWith("test")) 
   {   
     fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\${request}.txt`, 'utf8', (err, data) => {
       if (err) 
@@ -97,7 +113,6 @@ app.post('/', function(req, res) {
 
   else if(request.startsWith("tool")) 
   {   
-    var Delay = 0;
     fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\${request}.txt`, 'utf8', (err, data) => {
       if (err) 
       {
@@ -106,112 +121,47 @@ app.post('/', function(req, res) {
       else 
       {
         DriveGcodeFile(data);
-        console.log('\x1b[33m%s\x1b[0m','Estimated time: '+EstimateTime(data)+'s'); //writes it in the terminal in yellow so its easier to find
-        setTimeout(()=>{
-          port.write('L');
-        },EstimateTime(data)*1000)
       }
     });
   }
 });
 
 //writing gcode file to COM port
-function DriveGcodeFile(Data)
-{
-  const lines = Data.split('\n');
-  let i = 1;
-  AxsisControl(lines[0]+'\n')
-  setInterval(()=>{
-    if(NextOk && (i<lines.length))
-    {
-      AxsisControl(lines[i]+'\n')
-      i++;
-      NextOk=false;
-    }
-  },100)
-}
+function DriveGcodeFile(data) {
+  const lines = data.split('\n');
+  let currentIndex = 0;
+  let LinesDone = false;
 
-//inverting of x-axsis + min / max values
-function AxsisControl(Coordinates)
-{
-  const regexZ = /Z(-?\d+(\.\d+)?)/; // Regular expression to match the Z-value
-  const regexY = /Y(-?\d+(\.\d+)?)/; // Regular expression to match the Y-value
-  const matchZ = regexZ.exec(Coordinates);
-  const matchY = regexY.exec(Coordinates);
-  if (matchZ && matchY) {
-    const zValue = parseFloat(matchZ[1]);
-    const newZ = 240 - Math.min(zValue, 240);   //maks verdi = 240
-    const yValue = parseFloat(matchY[1]);
-    const newY = Math.min(yValue, 170);         //maks verdi = 170
-    
-    //replaces the old values with adjusted values:
-    Coordinates = Coordinates.replace(regexZ, `Z${newZ.toFixed(3)}`).replace(regexY, `Y${newY.toFixed(3)}`);
-  }
-  port2.write(Coordinates);
-  console.log("Sendt: ", Coordinates);
-}
+  function sendNextLine() {
+    if (currentIndex < lines.length) 
+    {
+      const line = lines[currentIndex].trim();
 
-//estmiates the time it will take to complete the Gcode
-function EstimateTime(GcodeFile)
-{
-  const lines = GcodeFile.split('\n');
-  var Z_Values = [240];
-  var Y_Values = [0];
-  var F_Values = [0];
-  var Time = 0;
-  for(let i = 0; i<lines.length; i++)
-  {
-    const regexZ = /Z(-?\d+(\.\d+)?)/; // Regular expression to match the Z-value
-    const regexY = /Y(-?\d+(\.\d+)?)/; // Regular expression to match the Y-value
-    const regexF = /F(-?\d+(\.\d+)?)/; // Regular expression to match the F-value
-    const matchZ = regexZ.exec(lines[i]);
-    const matchY = regexY.exec(lines[i]);
-    const matchF = regexF.exec(lines[i]);
-    if(matchZ)
-    {
-      const zValue = parseFloat(matchZ[1]);
-      Z_Values.push(zValue);
-    }
-    if(matchY)
-    {
-      const yValue = parseFloat(matchY[1]);
-      Y_Values.push(yValue);
-    }
-    if(matchF)
-    {
-      const fValue = parseFloat(matchF[1]);
-      F_Values.push(fValue);
-    }
-  }
-  for(let j = 0; j<Z_Values.length-1; j++)  //Check the lenght of the Z-axsis array, as we then avoid the problem of calculating with empty lines
-  {
-    let Z_diff = Math.abs(Z_Values[j]-Z_Values[j+1]);
-    let Y_diff = Math.abs(Y_Values[j]-Y_Values[j+1]);
-    if(Z_diff>Y_diff)                       //The time will always be based on the axsis that has to travel the furtest
-    {
-      Time += (Z_diff/F_Values[j+1])*60;    //Mathematical formula for time based on start / end and speed, 60 is a constant derived from timing the CNC
-      if (j>=1)
-      {
-        if(Math.sign(Z_Values[j-1]-Z_Values[j])!=Math.sign(Z_Values[j]-Z_Values[j+1]))  //Checks if the CNC changes direction to compensate for acceleration time
-        {
-          Time+=0.73; //acceleration time
-        }
+      if (line !== '') {
+        console.log('Sendt data: ', line);
+        port2.write(`${line}\n`, (err) => {
+          if (err) {
+            console.error('Error writing to serial port:', err.message);
+          }
+        });
       }
+      currentIndex++;
     }
     else
     {
-      Time += (Y_diff/F_Values[j+1])*60;
-      if (j>=1)
-      {
-        if(Math.sign(Y_Values[j-1]-Y_Values[j])!=Math.sign(Y_Values[j]-Y_Values[j+1]))
-        {
-          Time+=0.73;
-        }
-      }
+      port2.write('?\n');
     }
   }
-  return (Math.round(Time * 100) / 100).toFixed(2); //two decimals
+
+  port2.on('data', (data) => {
+    if (data.toString().trim() === 'ok') {
+      sendNextLine();
+    }
+  });
+
+  sendNextLine();
 }
+
 
 function FresProgram()
 {
@@ -229,10 +179,14 @@ function FresProgram()
 }
 //drives the CNC home at startup
 setTimeout(()=>{
-  port2.write(home);
-},1500)
+  port2.write('$H\n');
+  port2.write('G92 X0 Y0 Z0\n');
+},3500)
 
 // Listen for connections on port 3000
 app.listen(3000, function() {
   console.log('Server listening on port 3000');
 });
+
+
+
