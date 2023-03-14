@@ -4,8 +4,16 @@ const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const fs = require('fs');
 const { restart } = require('nodemon');
-const app = express();
+let CNCData = '';
+let ToolData = '';
+let CNCRunning = false;
+let CNCDone = false;
+const socket = require("socket.io")
 
+
+const app = express();
+var server = app.listen(3000); 
+app.use(express.static("public"))
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize serial ports
@@ -15,6 +23,7 @@ const parser = new ReadlineParser();
 const parser2 = new ReadlineParser();
 port.pipe(parser);
 port2.pipe(parser2);
+
 
 // Listen for ports to open
 port.on('open', () => {
@@ -26,6 +35,7 @@ port2.on('open', () => {
 
 // Listen for incomming data
 parser.on('data', (data) => {
+  ToolData=data;
   console.log("Recieved(Tool): ",data);
   if (data.trim() === 'F') {
     FresProgram();
@@ -34,9 +44,12 @@ parser.on('data', (data) => {
 });
 
 parser2.on('data', (data) => {
+  CNCData=data;
   console.log("Recieved(CNC): ",data);
   if (data.includes('<Run,MPos:'))
   {
+    CNCRunning = true;
+    CNCDone = false;
     setTimeout(function() {
       port2.write('?\n')
     }, 2000);
@@ -44,8 +57,16 @@ parser2.on('data', (data) => {
 
   else if (data.includes('<Idle,MPos:'))
   {
+    CNCRunning=false;
+    CNCDone=true;
    console.log("THE CNC HAS ARRIVED AT END STOP!!!");
    port.write('L');
+  }
+
+  else if(data.includes('<Alarm,MPos:'))
+  {
+    CNCDone=true;
+    CNCRunning=false;
   }
 
   if(data.includes("ALARM: Homing fail"))
@@ -56,8 +77,6 @@ parser2.on('data', (data) => {
   }, 1500);
   }
 });
-
-app.use(express.static("public"))
 
 // Handle POST request to root route
 app.post('/', function(req, res) {
@@ -183,7 +202,15 @@ setTimeout(()=>{
   port2.write('G92 X0 Y0 Z0\n');
 },3500)
 
-// Listen for connections on port 3000
-app.listen(3000, function() {
-  console.log('Server listening on port 3000');
-});
+//socket stuff
+
+var io = socket(server)
+var index = 0;
+
+io.sockets.on("connection", (socket) => {
+  socket.on("AskForCNCdata", (d) => {
+    socket.emit("LogData", {CNCData,ToolData})
+    if(CNCDone) socket.emit("CNCDone")
+    if(CNCRunning) socket.emit("CNCRunning")
+  })
+})

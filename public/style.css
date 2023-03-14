@@ -15,7 +15,7 @@
   }
   
   /* Heading styles */
-  h2, h3 {
+  h1,h2, h3 {
     font-size: 26px;
     margin-bottom: 10px;
     font-weight: bold;
@@ -28,6 +28,9 @@
     margin-bottom: 20px;
     color: #ffffff;
     text-shadow: 2px 2px 0 #525252;
+  }
+  h1{
+    margin-bottom: 2px;
   }
   
   /* Button styles */
@@ -74,9 +77,9 @@
   
   /* Demo program input explanation text styles */
   p {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #666;
+    margin-top: 0px;
+    font-size: 20px;
+    color: #f7e32f;
   }
   
   /* Green button for Home */
@@ -117,4 +120,8 @@ body {
     opacity: 0.5;
     pointer-events: none;
   }
+  
+h1{
+  display: inline-block;
+}
   

@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CNC Machine Demo</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdn.socket.io/socket.io-3.0.5.js"></script>
+  <script src="./socket.js"></script>
+
 </head>
 <body>
-  <h2>CNC Machine Demo</h2>
+  <h2 id="Tittel">CNC Machine Demo</h2>
 
   <form action="/" method="post">
     <input type="submit" name="Restartbtn" value="Home" id="homebtn">
@@ -33,6 +36,12 @@
     <input type="text" name="character" placeholder="Enter demo/tool program" id="txt2">
   </form>
 
+  <h1>CNC Data</h1>
+  <p id="CNCdata">Waiting for data...</p>
+
+  <h1>Tool Data</h1>
+  <p id="Tooldata">Waiting for data...</p>
+  
   <script>
     const forceBtn = document.querySelector("#forcebtn");
     const homeBtn = document.querySelector("#homebtn");
@@ -44,6 +53,8 @@
       t1.disabled=true;
       txt1.disabled=true;
       txt2.disabled=true;
+      homebtn.disabled=false;
+      homebtn.classList.remove("disabled");
       forcebtn.classList.add("disabled");
       t1.classList.add("disabled");
       t2.classList.add("disabled");
