@@ -4,37 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CNC Machine Demo</title>
-
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <h2>CNC Machine Demo</h2>
 
   <form action="/" method="post">
-    <input type="submit" name="Restartbtn" value="Home">
-    <input type="submit" name="Forcebtn" value="Emergency Stop">
+    <input type="submit" name="Restartbtn" value="Home" id="homebtn">
+    <input type="submit" name="Forcebtn" value="ESTOP" id="forcebtn">
   </form>
 
   <h3>Tool swap protocol</h3>
   <form action="/" method="post">
-    <input type="submit" name="Tool1" value="tool1">
-    <input type="submit" name="Tool2" value="tool2">
-    <input type="submit" name="Tool3" value="tool3">
+    <input type="submit" name="Tool1" value="tool1" id="t1">
+    <input type="submit" name="Tool2" value="tool2" id="t2">
+    <input type="submit" name="Tool3" value="tool3" id="t3">
   </form>
 
   <h3>Manual commands</h3>
 
   <form action="/" method="post">
-    <input type="text" name="xy_input" placeholder="XY axis">
+    <input type="text" name="xy_input" placeholder="Gcode commands" id="txt1">
   </form>
 
-  <h3>Demo / Tool Programs</h3>
-  <p>Input format: "demo1/2/3..." OR "M112, M123, L..."</p>
+  <h3>Demo programs</h3>
 
   <form action="/" method="post">
-    <input type="text" name="character" placeholder="Enter demo/tool program">
+    <input type="text" name="character" placeholder="Enter demo/tool program" id="txt2">
   </form>
 
+  <script>
+    const forceBtn = document.querySelector("#forcebtn");
+    const homeBtn = document.querySelector("#homebtn");
 
+    forceBtn.addEventListener("click", function() {
 
+      t3.disabled=true;
+      t2.disabled=true;
+      t1.disabled=true;
+      txt1.disabled=true;
+      txt2.disabled=true;
+      forcebtn.classList.add("disabled");
+      t1.classList.add("disabled");
+      t2.classList.add("disabled");
+      t3.classList.add("disabled");
+    });
+
+    homeBtn.addEventListener("click", function() {
+      forcebtn.disabled=false;
+      t3.disabled=false;
+      t2.disabled=false;
+      t1.disabled=false;
+      txt1.disabled=false;
+      txt2.disabled=false;
+      forcebtn.classList.remove("disabled");
+      t1.classList.remove("disabled");
+      t2.classList.remove("disabled");
+      t3.classList.remove("disabled");
+    });
+  </script>
 </body>
 </html>

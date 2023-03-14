@@ -32,6 +32,7 @@ parser.on('data', (data) => {
   }
 
 });
+
 parser2.on('data', (data) => {
   console.log("Recieved(CNC): ",data);
   if (data.includes('<Run,MPos:'))
@@ -70,7 +71,7 @@ app.post('/', function(req, res) {
 
   console.log('Sendt data: ',request)
   //Emergancy stop
-  if (request == "Emergency Stop")
+  if (request == "ESTOP")
   {
     port2.write('\x18');
     console.log('\x1b[31m%s\x1b[0m', 'ESTOP CNC ACTIVATED!');
@@ -106,7 +107,6 @@ app.post('/', function(req, res) {
       else 
       {
         DriveGcodeFile(data);
-        console.log('\x1b[33m%s\x1b[0m','Estimated time: '+EstimateTime(data)+'s'); //writes it in the terminal in yellow so its easier to find
       }
     });
   }
@@ -187,6 +187,3 @@ setTimeout(()=>{
 app.listen(3000, function() {
   console.log('Server listening on port 3000');
 });
-
-
-

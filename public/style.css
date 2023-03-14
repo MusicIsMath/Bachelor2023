@@ -1,0 +1,120 @@
+/* Reset default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Body styles */
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: #8fadb7;
+    color: #333;
+  }
+  
+  /* Heading styles */
+  h2, h3 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color:rgba(0, 0, 0, 0.541)
+ 
+  }
+
+  h2{
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 2px 2px 0 #525252;
+  }
+  
+  /* Button styles */
+  input[type="submit"] {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffffffd1;
+    background-color: #6a6969;
+    cursor: pointer;
+  }
+  
+  /* Button hover effect */
+  input[type="submit"]:hover {
+    background-color: #555;
+  }
+  
+  /* Text input styles */
+  input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Placeholder text color */
+  input[type="text"]::placeholder {
+    color: #838181;
+  }
+  
+  /* Form container styles */
+  form {
+    margin-bottom: 20px;
+  }
+  
+  /* Demo program input explanation text styles */
+  p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Green button for Home */
+input[name="Restartbtn"] {
+    background-color: #8bc34a;
+  }
+  
+  /* Red button for ESTOP */
+input[name="Forcebtn"] {
+    background-color: #e76138;
+    color: #333;
+  }
+  
+  /* Hover effect for ESTOP button */
+input[name="Forcebtn"]:hover {
+    background-color: #dd8064;
+  }
+
+/* Hover effect for ESTOP button */
+input[name="Restartbtn"]:hover {
+    background-color: #88dc7f;
+    }
+
+/* Center the page */
+html, body {
+    height: 100%;
+  }
+  
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  } 
+
+  /* Styles for disabled elements */
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
