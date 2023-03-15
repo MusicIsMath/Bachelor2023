@@ -1,21 +1,16 @@
-const socket = io("localhost:3000");
+const socket = io();
 
-setInterval(() => { //ask for cnc data every 1 sec
-    socket.emit("AskForCNCdata");
-}, 300);
-
-
-socket.on("LogData", (data)=> { //do something based on what data you recieve
-    console.log(data.CNCData);
-    console.log(data.ToolData);
+socket.on("CNCData", (data)=> { //do something based on what data you recieve
+    console.log(data);;
     var element = document.getElementById("CNCdata"); 
-    element.textContent = "last data: "+data.CNCData;
-    var element2 = document.getElementById("Tooldata"); 
-    element2.textContent = "last data: "+data.ToolData;
+    element.textContent = "last data: "+data;
 })
 
-// Get all the elements in the HTML
-const elements = document.getElementsByTagName("*");
+socket.on("ToolData", (data)=> { //do something based on what data you recieve
+    console.log(data);
+    var element = document.getElementById("Tooldata"); 
+    element.textContent = "last data: "+data;
+})
 
 socket.on("CNCRunning", () => {
     console.log("Running!");

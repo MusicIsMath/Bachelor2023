@@ -10,7 +10,7 @@
     font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
-    background-color: #8fadb7;
+    background-color: #9c9c9c;
     color: #333;
   }
   
@@ -34,7 +34,8 @@
   }
   
   /* Button styles */
-  input[type="submit"] {
+  input[type="submit"],
+  input[type="button"]{
     display: inline-block;
     margin-right: 10px;
     margin-bottom: 10px;
@@ -50,7 +51,8 @@
   }
   
   /* Button hover effect */
-  input[type="submit"]:hover {
+  input[type="submit"]:hover,
+  input[type="button"]:hover{
     background-color: #555;
   }
   
@@ -92,13 +94,18 @@ input[name="Forcebtn"] {
     background-color: #e76138;
     color: #333;
   }
+
+input[name="Livesim"] {
+    background-color: #38b8e7;
+    color: #333;
+}
   
   /* Hover effect for ESTOP button */
 input[name="Forcebtn"]:hover {
     background-color: #dd8064;
   }
 
-/* Hover effect for ESTOP button */
+/* Hover effect for Home button */
 input[name="Restartbtn"]:hover {
     background-color: #88dc7f;
     }
@@ -123,5 +130,12 @@ body {
   
 h1{
   display: inline-block;
+}
+
+/*/Livesim style*/
+canvas{
+  background-color: rgb(255, 255, 255);
+  border: 6px solid rgb(63, 63, 63);
+  padding: 2px;
 }
   

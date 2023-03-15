@@ -4,17 +4,18 @@ const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const fs = require('fs');
 const { restart } = require('nodemon');
-let CNCData = '';
-let ToolData = '';
-let CNCRunning = false;
-let CNCDone = false;
 const socket = require("socket.io")
-
-
 const app = express();
+
 var server = app.listen(3000); 
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({ extended: true }));
+var io = socket(server) //io for home site
+const livesimIO = io.of("/livesim"); //io for livesim
+
+app.get('/Livesim', function(req, res) {
+  res.sendFile(__dirname + '/public/Livesim.html');
+});
 
 // Initialize serial ports
 const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
@@ -35,7 +36,7 @@ port2.on('open', () => {
 
 // Listen for incomming data
 parser.on('data', (data) => {
-  ToolData=data;
+  io.emit("ToolData", data)
   console.log("Recieved(Tool): ",data);
   if (data.trim() === 'F') {
     FresProgram();
@@ -44,29 +45,27 @@ parser.on('data', (data) => {
 });
 
 parser2.on('data', (data) => {
-  CNCData=data;
+  io.emit("CNCData", data)
   console.log("Recieved(CNC): ",data);
   if (data.includes('<Run,MPos:'))
   {
-    CNCRunning = true;
-    CNCDone = false;
+    io.emit("CNCRunning");
+    io.emit("PositionTracking",data);
     setTimeout(function() {
       port2.write('?\n')
-    }, 2000);
+    }, 100);
   }
 
   else if (data.includes('<Idle,MPos:'))
   {
-    CNCRunning=false;
-    CNCDone=true;
-   console.log("THE CNC HAS ARRIVED AT END STOP!!!");
-   port.write('L');
+    io.emit("CNCDone");
+    console.log("THE CNC HAS ARRIVED AT END STOP!!!");
+    port.write('L');
   }
 
   else if(data.includes('<Alarm,MPos:'))
   {
-    CNCDone=true;
-    CNCRunning=false;
+    io.emit("CNCDone");
   }
 
   if(data.includes("ALARM: Homing fail"))
@@ -196,21 +195,9 @@ function FresProgram()
     }
   });
 }
+
 //drives the CNC home at startup
 setTimeout(()=>{
   port2.write('$H\n');
   port2.write('G92 X0 Y0 Z0\n');
 },3500)
-
-//socket stuff
-
-var io = socket(server)
-var index = 0;
-
-io.sockets.on("connection", (socket) => {
-  socket.on("AskForCNCdata", (d) => {
-    socket.emit("LogData", {CNCData,ToolData})
-    if(CNCDone) socket.emit("CNCDone")
-    if(CNCRunning) socket.emit("CNCRunning")
-  })
-})

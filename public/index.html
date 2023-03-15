@@ -6,7 +6,7 @@
   <title>CNC Machine Demo</title>
   <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://cdn.socket.io/socket.io-3.0.5.js"></script>
-  <script src="./socket.js"></script>
+  <script src="./home.js"></script>
 
 </head>
 <body>
@@ -15,6 +15,7 @@
   <form action="/" method="post">
     <input type="submit" name="Restartbtn" value="Home" id="homebtn">
     <input type="submit" name="Forcebtn" value="ESTOP" id="forcebtn">
+    <input type="button" name="Livesim" value="Live sim" onclick="location.href='http://localhost:3000/Livesim';">
   </form>
 
   <h3>Tool swap protocol</h3>
