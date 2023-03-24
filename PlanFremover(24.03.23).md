@@ -7,7 +7,7 @@
 - Montere hardware sammen (skruer og bolter påvei)
 - Ledninger som supply til Kort (tool body)
 
-### 11 april og fremover:
+## 11 april og fremover:
 - Gjøre det som gjennstår fra uken før påsken, deretter begynne på å implimentere fres verktøy
 - Potensielt  bestille nye kretskort (eksisterende kan bli problem med låsing sammen)
 - Ferdigstilling av server code, som inkluderer side for hvert verktøy som gir bruker mulighet til å justere parameter
