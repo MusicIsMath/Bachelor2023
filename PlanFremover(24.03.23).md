@@ -1,5 +1,5 @@
-### 27-31 mars:
-## Prøve å til skifte til tusj og kjøre ett program med tusj, dette inkluderer:
+## 27-31 mars:
+### Prøve å få til skifte til tusj og kjøre ett program med tusj, dette inkluderer:
 - Ta i bruk nye Arduino micro
 - Lodde ferdig
 - Kjøre / modifisere eksisterende kode for Arduino
