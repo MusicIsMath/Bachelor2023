@@ -134,8 +134,12 @@ h1{
 
 /*/Livesim style*/
 canvas{
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(211, 209, 209);
   border: 6px solid rgb(63, 63, 63);
   padding: 2px;
+}
+
+ChangeWindowBtns{
+  background-color: #f7e32f;
 }
   

@@ -18,7 +18,7 @@ app.get('/Livesim', function(req, res) {
 });
 
 // Initialize serial ports
-const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 });
 const port2 = new SerialPort({ path: 'COM5', baudRate: 115200 });
 const parser = new ReadlineParser();
 const parser2 = new ReadlineParser();
@@ -109,7 +109,7 @@ app.post('/', function(req, res) {
   }
 
   //send string info to port1 (tool)
-  else if(request[0]=='M' || request[0]=='L' || request[0]=='S')
+  else if(request[0]=='T' || request[0]=='L' || request[0]=='S')
   {
     port.write(request);
   }
