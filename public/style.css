@@ -1,145 +1,184 @@
 /* Reset default styles */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Body styles */
-  body {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    background-color: #9c9c9c;
-    color: #333;
-  }
-  
-  /* Heading styles */
-  h1,h2, h3 {
-    font-size: 26px;
-    margin-bottom: 10px;
-    font-weight: bold;
-    color:rgba(0, 0, 0, 0.541)
- 
-  }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  h2{
-    font-size: 36px;
-    margin-bottom: 20px;
-    color: #ffffff;
-    text-shadow: 2px 2px 0 #525252;
-  }
-  h1{
-    margin-bottom: 2px;
-  }
-  
-  /* Button styles */
-  input[type="submit"],
-  input[type="button"]{
-    display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #ffffffd1;
-    background-color: #6a6969;
-    cursor: pointer;
-  }
-  
-  /* Button hover effect */
-  input[type="submit"]:hover,
-  input[type="button"]:hover{
-    background-color: #555;
-  }
-  
-  /* Text input styles */
-  input[type="text"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Placeholder text color */
-  input[type="text"]::placeholder {
-    color: #838181;
-  }
-  
-  /* Form container styles */
-  form {
-    margin-bottom: 20px;
-  }
-  
-  /* Demo program input explanation text styles */
-  p {
-    margin-top: 0px;
-    font-size: 20px;
-    color: #f7e32f;
-  }
-  
-  /* Green button for Home */
+/* Body styles */
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  background: linear-gradient(320deg,#eb92be,#ffef78,#63c9b4);
+}
+
+/* Heading styles */
+h1,h2, h3 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color:rgba(0, 0, 0, 0.541)
+
+}
+
+h2{
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #525252;
+}
+h1{
+  margin-bottom: 2px;
+}
+
+/* Button styles */
+input[type="submit"],
+input[type="button"]{
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #ffffffd1;
+  background-color: #6a6969;
+  cursor: pointer;
+}
+
+/* Button hover effect */
+input[type="submit"]:hover,
+input[type="button"]:hover{
+  background-color: #555;
+}
+
+/* Text input styles */
+input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Placeholder text color */
+input[type="text"]::placeholder {
+  color: #838181;
+}
+
+/* Form container styles */
+form {
+  margin-bottom: 20px;
+}
+
+/* Demo program input explanation text styles */
+p {
+  margin-top: 0px;
+  font-size: 20px;
+  color: #f7e32f;
+}
+
+/* Green button for Home */
 input[name="Restartbtn"] {
-    background-color: #8bc34a;
-  }
-  
-  /* Red button for ESTOP */
+  background-color: #8bc34a;
+}
+
+/* Red button for ESTOP */
 input[name="Forcebtn"] {
-    background-color: #e76138;
-    color: #333;
-  }
+  background-color: #e76138;
+  color: #333;
+}
 
 input[name="Livesim"] {
-    background-color: #38b8e7;
-    color: #333;
+  background-color: #38b8e7;
+  color: #333;
 }
-  
-  /* Hover effect for ESTOP button */
+
+/* Hover effect for ESTOP button */
 input[name="Forcebtn"]:hover {
-    background-color: #dd8064;
-  }
+  background-color: #dd8064;
+}
 
 /* Hover effect for Home button */
 input[name="Restartbtn"]:hover {
-    background-color: #88dc7f;
-    }
+  background-color: #88dc7f;
+  }
 
 /* Center the page */
 html, body {
-    height: 100%;
-  }
-  
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  } 
+  height: 100%;
+}
 
-  /* Styles for disabled elements */
+
+/* Styles for disabled elements */
 .disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-  
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 h1{
-  display: inline-block;
+display: inline-block;
 }
 
 /*/Livesim style*/
 canvas{
-  background-color: rgb(211, 209, 209);
-  border: 6px solid rgb(63, 63, 63);
-  padding: 2px;
+background-color: rgb(211, 209, 209);
+border: 6px solid rgb(63, 63, 63);
+padding: 2px;
 }
 
-ChangeWindowBtns{
-  background-color: #f7e32f;
+.tab-window {
+width: 40%;
+margin: 20px auto;
+background-color: #f1f1f1;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+padding: 20px;
 }
-  
+
+/* Style the tab buttons */
+.tab {
+display: flex;
+background-color: #f1f1f1;
+overflow: hidden;
+border-bottom: 1px solid #ccc;
+}
+
+/* Style the tab links */
+.tablinks {
+background-color: #d9d9d9;
+padding: 10px 20px;
+border: none;
+font-size: 16px;
+text-align: center;
+text-transform: uppercase;
+color: #333;
+transition: background-color 0.3s;
+cursor: pointer;
+flex: 1;
+}
+
+/* Change the background color of the active tab button */
+.tablinks.active {
+background-color: #9b9b9b;
+}
+
+/* Style the tab content */
+.tabcontent {
+display: none;
+padding: 20px;
+background-color: #9ec3be;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+height: 400px;
+}

@@ -7,17 +7,13 @@
   <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://cdn.socket.io/socket.io-3.0.5.js"></script>
   <script src="./home.js"></script>
-
 </head>
 <body>
   <h2 id="Tittel">CNC Machine Demo</h2>
-
   <form action="/" method="post">
     <input type="submit" name="Restartbtn" value="Home" id="homebtn">
     <input type="submit" name="Forcebtn" value="ESTOP" id="forcebtn">
-    <input type="button" name="Livesim" value="Live sim" onclick="location.href='http://localhost:3000/Livesim';">
   </form>
-
   <h3>Tool swap protocol</h3>
   <form action="/" method="post">
     <input type="submit" name="Tool1" value="tool1" id="t1">
@@ -25,56 +21,97 @@
     <input type="submit" name="Tool3" value="tool3" id="t3">
   </form>
 
+  <div class="tab-window">
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 'home')" id="defaultOpen">Home</button>
+      <button class="tablinks" onclick="openTab(event, 'tab2')">Live Sim</button>
+      <button class="tablinks" onclick="openTab(event, 'tab3')">Mill-tool</button>
+      <button class="tablinks" onclick="openTab(event, 'tab4')">Marker-tool</button>
+    </div>
 
-  <h3>Manual commands</h3>
+  <div id="home" class="tabcontent">
+    <h3>Manual commands</h3>
 
-  <form action="/" method="post">
-    <input type="text" name="xy_input" placeholder="Gcode commands" id="txt1">
-  </form>
+    <form action="/" method="post">
+      <input type="text" name="xy_input" placeholder="Gcode commands" id="txt1">
+    </form>
 
-  <h3>Demo programs</h3>
+    <h3>Demo programs</h3>
 
-  <form action="/" method="post">
-    <input type="text" name="character" placeholder="Enter demo/tool program" id="txt2">
-  </form>
+    <form action="/" method="post">
+      <input type="text" name="character" placeholder="Enter demo/tool program" id="txt2">
+    </form>
 
-  <h1>CNC Data</h1>
-  <p id="CNCdata">Waiting for data...</p>
+    <h1>CNC Data</h1>
+    <p id="CNCdata">Waiting for data...</p>
 
-  <h1>Tool Data</h1>
-  <p id="Tooldata">Waiting for data...</p>
-  
+    <h1>Tool Data</h1>
+    <p id="Tooldata">Waiting for data...</p>
+      <script>
+        const forceBtn = document.querySelector("#forcebtn");
+        const homeBtn = document.querySelector("#homebtn");
+
+        forceBtn.addEventListener("click", function() {
+
+          t3.disabled=true;
+          t2.disabled=true;
+          t1.disabled=true;
+          txt1.disabled=true;
+          txt2.disabled=true;
+          homebtn.disabled=false;
+          homebtn.classList.remove("disabled");
+          forcebtn.classList.add("disabled");
+          t1.classList.add("disabled");
+          t2.classList.add("disabled");
+          t3.classList.add("disabled");
+        });
+
+        homeBtn.addEventListener("click", function() {
+          forcebtn.disabled=false;
+          t3.disabled=false;
+          t2.disabled=false;
+          t1.disabled=false;
+          txt1.disabled=false;
+          txt2.disabled=false;
+          forcebtn.classList.remove("disabled");
+          t1.classList.remove("disabled");
+          t2.classList.remove("disabled");
+          t3.classList.remove("disabled");
+        });
+      </script>
+    </div>
+
+    <div id="tab2" class="tabcontent">
+      <canvas id="canvas" class="centered-canvas" width="590" height="350"></canvas>
+
+    </div>
+    <div id="tab3" class="tabcontent">
+      <h3>Pick RPM:</h3>
+      <form action="/" method="post">
+        <input type="text" name="RPM_input" placeholder="type a rpm" id="RPM">
+      </form>
+    </div>
+    <div id="tab4" class="tabcontent">
+      <p>This is tab 4</p>
+    </div>
+  </div>
+
   <script>
-    const forceBtn = document.querySelector("#forcebtn");
-    const homeBtn = document.querySelector("#homebtn");
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
 
-    forceBtn.addEventListener("click", function() {
-
-      t3.disabled=true;
-      t2.disabled=true;
-      t1.disabled=true;
-      txt1.disabled=true;
-      txt2.disabled=true;
-      homebtn.disabled=false;
-      homebtn.classList.remove("disabled");
-      forcebtn.classList.add("disabled");
-      t1.classList.add("disabled");
-      t2.classList.add("disabled");
-      t3.classList.add("disabled");
-    });
-
-    homeBtn.addEventListener("click", function() {
-      forcebtn.disabled=false;
-      t3.disabled=false;
-      t2.disabled=false;
-      t1.disabled=false;
-      txt1.disabled=false;
-      txt2.disabled=false;
-      forcebtn.classList.remove("disabled");
-      t1.classList.remove("disabled");
-      t2.classList.remove("disabled");
-      t3.classList.remove("disabled");
-    });
+    document.getElementById("defaultOpen").click();
   </script>
 </body>
 </html>
