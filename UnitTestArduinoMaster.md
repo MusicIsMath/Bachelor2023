@@ -1,6 +1,4 @@
 ```
-// Unit tests for Arduino program
-
 // Test StartFres function
 void testStartFres() {
   // Test for a given input RPM
