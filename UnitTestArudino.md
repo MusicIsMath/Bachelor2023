@@ -1,4 +1,4 @@
-``
+```
 void test_Read(){
   // Test Case 1: String starting with "S"
   String s1 = "S Hello World";
@@ -101,4 +101,4 @@ void test_ClearSerial(){
   assert(Serial.readString() == "");
   assert(SerialArduino.readString() == "");
 }
-``
+```
