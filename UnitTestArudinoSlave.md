@@ -101,4 +101,10 @@ void test_ClearSerial(){
   assert(Serial.readString() == "");
   assert(SerialArduino.readString() == "");
 }
+
+void assert(bool condition) {
+  if (!condition) {
+    while (true);
+  }
+}
 ```
