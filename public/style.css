@@ -1,0 +1,183 @@
+/* Reset default styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  }
+  /* Body styles */
+  body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #9c6f51;
+  background: linear-gradient(320deg, #363636, #989898, #ffffff);
+  }
+  
+  /* Heading styles */
+  h1, h2, h3 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #9c6f51;
+  }
+  
+  h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #ff6f00;
+  }
+  
+  h1 {
+  margin-bottom: 2px;
+  }
+  
+  /* Button styles */
+  button {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #3e3e3e;
+  background-color: #ff9e5d;
+  cursor: pointer;
+  }
+  
+  /* Button hover effect */
+  button:hover {
+  background-color: #ff8a33;
+  }
+  
+  /* Text input styles */
+  input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Placeholder text color */
+  input[type="text"]::placeholder {
+  color: #838080;
+  }
+  
+  /* Demo program input explanation text styles */
+  p {
+  margin-top: 0px;
+  font-size: 20px;
+  color: #ffffff;
+  }
+  
+  /* Green button for Home */
+  #homebtn {
+  background-color: #fff423;
+  }
+  
+  /* Red button for ESTOP */
+  #forcebtn {
+  background-color: #ff5500;
+  color: #333;
+  }
+  
+  /* Hover effect for ESTOP button */
+  #forcebtn:hover {
+  background-color: #ff8a33;
+  }
+  
+  /* Hover effect for Home button */
+  #homebtn:hover {
+  background-color: #ffb288;
+  }
+  
+  /* Center the page */
+  html, body {
+  height: 100%;
+  }
+  
+  /* Styles for disabled elements */
+  .disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  }
+  
+  /*ivesim style*/
+  canvas {
+  background-color: #ffffff;
+  border: 6px solid #ff6f00;
+  padding: 2px;
+  width: 100%;
+  height: 100%;
+  }
+  
+  .tab-window {
+  width: 35.5%;
+  margin: 20px auto;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  }
+  
+  /* Style the tab buttons */
+  .tab {
+  display: flex;
+  overflow: hidden;
+  }
+  
+  /* Style the tab links */
+  .tablinks {
+  background-color: #ff9e5d;
+  padding: 10px 20px;
+  border: none;
+  font-size: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #333;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  flex: 1;
+  margin: 0;
+  }
+
+  /* Change the background color of the active tab button */
+.tablinks.active {
+  background-color: #ffc384;
+  }
+  
+  /* Style the tab content */
+  .tabcontent {
+  display: none;
+  padding: 20px;
+  background-color: #ffc384;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 400px;
+  }
+  #tab3 label{
+    color: #9c6f51;
+  }
+  #tab3 button{
+    margin-top: 20px;
+  }
+
+  
+  #tab3 input{
+    width: 300px;
+    margin-top: 20px;
+  }
+
+  #tab4 canvas{
+    height: 90%;
+  }
+
