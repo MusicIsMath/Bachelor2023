@@ -34,6 +34,7 @@ window.onload = function() {
     const toolbtn1 = document.querySelector("#t1");
     const toolbtn2 = document.querySelector("#t2");
 
+    //if e-stop is pressed every function is diabled untill you home the CNC
     forceBtn.addEventListener("click", function() {
         socket.emit('estop_pressed');
         t2.disabled = true;
@@ -258,7 +259,8 @@ window.onload = function() {
     sendCanvasButton.addEventListener("click", () => {
         sendCoordinateData();
     });
-
+    
+    //reset the draw canvas
     resetCanvasButton.addEventListener("click", () => {
         coordinateData=[];
         Drawctx.clearRect(0, 0, Drawcanvas.width, Drawcanvas.height);
