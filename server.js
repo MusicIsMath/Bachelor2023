@@ -40,17 +40,20 @@ function newConnection(socket) {
       // Check if any of the GrblCommandsChars are present in the input data
       const containsGrblCommandChar = GrblCommandsChars.some(char => data.includes(char));
   
+      //Sends the GCODE command to the CNC if its in the right format
       if (containsGrblCommandChar) {
         console.log('Sendt Data: ' + data);
         CNCPort.write(data+'\n');
       }
     });
 
+    //Force stop if E-stop button is pressed
     socket.on('estop_pressed',function(){
         console.log('\x1b[31m%s\x1b[0m', 'ESTOP CNC ACTIVATED!');
         CNCPort.write('\x18');
     });
 
+    //Sends the CNC home and zeros all the axsises
     socket.on('home_pressed',function(){
         console.log('Home pressed!');
         CNCPort.write('$H\n');
@@ -60,6 +63,7 @@ function newConnection(socket) {
     socket.on('sendTool',function(data){
         if(data!=='')
         {
+          //lets us run demo GCODE programs saved on PC
             if(data.includes('demo'))
             {
               fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\${data}.txt`, 'utf8', (err, GCODE) => {
@@ -74,6 +78,7 @@ function newConnection(socket) {
                     }
                   });
             }
+            //if you dont run a demo the line is sent to the tool arduino, this was mostly for testing
             else
             {
                 console.log('Sendt Data: ' + data);
@@ -82,7 +87,7 @@ function newConnection(socket) {
         }
     });
     
-    //tool and demo programs:
+    //Pickup for tool 1 and 2:
     socket.on('Tool1', function(){
 
       fs.readFile(`C:\\Users\\joaki\\OneDrive\\Skrivebord\\tool1.txt`, 'utf8', (err, GCODE) => {
@@ -113,26 +118,31 @@ function newConnection(socket) {
           });
     });
 
+    //RPM is sent to the tool, telling the arduino its RPM by starting with "T"
     socket.on('FresProgram', (GcodeFile, RPM) => {
       ToolPort.write('T'+RPM);
       RunGcode(GcodeFile);
     });
 
+    //Takes the saved coordinates from the draw drive functions and runs the CNC
     socket.on("coordinateData", (coordinateDataTxt) => {
       console.log(coordinateDataTxt);
       RunGcode(coordinateDataTxt);
     });
 }
 
+//Sends all the data from the tool to the client, so that the reponse can be displayed on the web site
 Toolparser.on('data', (data) =>{
     io.emit("ToolData",data);
     console.log("Recieved(Tool): ",data);
   });
 
+//Sends all the data from the CNC to be displayed aswell
 CNCparser.on('data', (data) =>{
     io.emit("CNCData",data);
     console.log("Recieved(CNC): ",data);
 
+    //If the CNC is running, we tell the client that its running and ask for the position again
     if (data.includes('<Run,MPos:'))
     {
       io.emit("CNCRunning",data);
@@ -141,17 +151,19 @@ CNCparser.on('data', (data) =>{
       }, 100);
     }
 
+    //Tells the client that the CNC is idle / done running, so we can enable buttons and functions again
     else if (data.includes('<Idle,MPos:'))
     {
       io.emit("CNCDone");
-      console.log("THE CNC HAS ARRIVED AT END STOP!!!");
     }
   
+    //To avoid being locked from the UI, we also tell the client the CNC is not running if its in alarm state
     else if(data.includes('<Alarm,MPos:'))
     {
       io.emit("CNCDone");
     }
     
+    //If the CNC fails to home, home again
     else if(data.includes("ALARM: Homing fail"))
     {
         setTimeout(function() {
@@ -178,7 +190,6 @@ function RunGcode(data) {
           currentLine++;
       } else {
           // Unsubscribe the 'ok' listener when all lines are sent
-          
           CNCparser.removeListener('data', onCNCDataReceived);
       }
   }
@@ -200,7 +211,7 @@ function RunGcode(data) {
   },500)
 }
 
-
+//when you start the server the CNC is homed
 setTimeout(()=>{
     CNCPort.write('$H\n');
     CNCPort.write('G92 X0 Y0 Z0\n');
