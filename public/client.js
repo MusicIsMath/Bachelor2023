@@ -1,12 +1,13 @@
 var socket;
 
 window.onload = function() {
-    socket = io.connect('http://localhost:3000');
+    //connects to the socket.io running on the server
+    socket = io.connect('http://localhost:3000'); 
     const canvas = document.querySelector('canvas');
     var ctx = canvas.getContext("2d");
     var prevX=0, prevY=0; // Store previous position
     
-    //send manual gcode to server:
+    //send manual gcode to server if enter is pressed:
     var GcodeCommand = document.getElementById('txt1');
     GcodeCommand.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
@@ -55,6 +56,7 @@ window.onload = function() {
         }
     });
 
+    //Enable functionality if you press home
     homeBtn.addEventListener("click", function() {
         socket.emit('home_pressed');
         forcebtn.disabled = false;
@@ -73,6 +75,7 @@ window.onload = function() {
         }
     });
 
+    //tells the server what tool you want to pick up
     toolbtn1.addEventListener("click", function(){
         socket.emit('Tool1');
     })
@@ -89,15 +92,19 @@ window.onload = function() {
         element.textContent = "last data: "+data;
     })
     
-    socket.on("ToolData", (data)=> { //do something based on what data you recieve
+    //display tool feedback
+    socket.on("ToolData", (data)=> { 
         console.log(data);
         var element = document.getElementById("Tooldata"); 
         element.textContent = "last data: "+data;
     })
     
+    //Display the CNC path in a window when its running. So you can remotly see its position
     socket.on("CNCRunning", (data) => {
         console.log("Running!");
         disableButtons();
+
+        //Grap the x and y values from the position feedback
         const matchArray = data.match(/WPos:(\-?\d+\.?\d*),(\-?\d+\.?\d*)/);
         const X = parseFloat(matchArray[1]);
         const Y = parseFloat(matchArray[2]);
@@ -155,6 +162,7 @@ window.onload = function() {
     const rpmInput = document.getElementById("RPM");
     const startButton = document.getElementById("start-button");
 
+    //Lets you start a milling job if you have picked a file and a RPM
     function updateButtonStatus() {
         if (fileInput.files.length > 0 && rpmInput.value !== "") {
         startButton.disabled = false;
@@ -163,6 +171,10 @@ window.onload = function() {
         }
     }
 
+    // This code sets up event listeners for 'change' on fileInput and 'input' on rpmInput to update button statuses. 
+    // When the 'start-button' is clicked, it creates a new FileReader object to read the selected file's content. 
+    // Once the file content is successfully loaded, a socket event "FresProgram" is emitted, sending the file content 
+    // and the RPM value to the server.
     fileInput.addEventListener("change", updateButtonStatus);
     rpmInput.addEventListener("input", updateButtonStatus);
     const StartBtn = document.querySelector('#start-button');
@@ -220,7 +232,7 @@ window.onload = function() {
     Drawctx.lineWidth = 2;
     Drawctx.strokeStyle = "#e76138";
 
-    // Add this function to scale the coordinates
+    //Function to scale the coordinates to the canvas
     function scaleCoordinates(point) {
         const xRange = 450;
         const yRange = 250;
@@ -230,10 +242,11 @@ window.onload = function() {
         return { x: scaledX, y: scaledY };
       }
     
-    // Update the sendCoordinateData function
+    // Scales all the coordinates and then sends them to the server
     function sendCoordinateData() {
         const coordinateDataTxt = coordinateData.map((point) => {
         const scaledPoint = scaleCoordinates(point);
+        //formats to Gcode format with two decimals as a string:
         return `G1 X${scaledPoint.x.toFixed(2)} Y${scaledPoint.y.toFixed(2)} Z0 F4000`;
         }).join('\n');
         socket.emit("coordinateData", coordinateDataTxt);
@@ -241,7 +254,7 @@ window.onload = function() {
     }
   
       
-      // Modify the sendCanvasButton click event listener to call the new function
+    // Modify the sendCanvasButton click event listener to call the new function
     sendCanvasButton.addEventListener("click", () => {
         sendCoordinateData();
     });
